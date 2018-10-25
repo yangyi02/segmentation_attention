@@ -1,0 +1,473 @@
+\documentclass[landscape,final,a0paper,fontscale=0.285]{baposter}
+
+\usepackage{calc}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{relsize}
+\usepackage{multirow}
+\usepackage{rotating}
+\usepackage{bm}
+\usepackage{url}
+
+
+\usepackage{graphicx}
+\usepackage{multicol}
+
+\usepackage{gensymb}
+
+\usepackage{bbm}
+
+\usepackage{booktabs}
+
+%\usepackage{times}
+%\usepackage{helvet}
+%\usepackage{bookman}
+\usepackage{palatino}
+
+\newcommand{\captionfont}{\footnotesize}
+
+\graphicspath{{images/}{../images/}}
+\usetikzlibrary{calc}
+
+\newcommand{\SET}[1]  {\ensuremath{\mathcal{#1}}}
+\newcommand{\MAT}[1]  {\ensuremath{\boldsymbol{#1}}}
+\newcommand{\VEC}[1]  {\ensuremath{\boldsymbol{#1}}}
+\newcommand{\Video}{\SET{V}}
+\newcommand{\video}{\VEC{f}}
+\newcommand{\track}{x}
+\newcommand{\Track}{\SET T}
+\newcommand{\LMs}{\SET L}
+\newcommand{\lm}{l}
+\newcommand{\PosE}{\SET P}
+\newcommand{\posE}{\VEC p}
+\newcommand{\negE}{\VEC n}
+\newcommand{\NegE}{\SET N}
+\newcommand{\Occluded}{\SET O}
+\newcommand{\occluded}{o}
+
+\newcommand{\by}[2]{\ensuremath{#1 \! \times \! #2}}
+
+\newcommand{\thetav}{\ensuremath{\bm{\theta}}}
+\newcommand{\dv}{\ensuremath{\bm{d}}}
+\newcommand{\gv}{\ensuremath{\bm{g}}}
+\newcommand{\xv}{\ensuremath{\bm{x}}}
+\newcommand{\yv}{\ensuremath{\bm{y}}}
+\newcommand{\zv}{\ensuremath{\bm{z}}}
+
+
+
+\DeclareRobustCommand\onedot{\futurelet\@let@token\@onedot}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%% Some math symbols used in the text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Multicol Settings
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\setlength{\columnsep}{1.5em}
+%\setlength{\columnseprule}{0mm}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Save space in lists. Use this after the opening of the list
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\compresslist}{%
+\setlength{\itemsep}{1pt}%
+\setlength{\parskip}{0pt}%
+\setlength{\parsep}{0pt}%
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Begin of Document
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Here starts the poster
+%%%---------------------------------------------------------------------------
+%%% Format it to your taste with the options
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Define some colors
+
+%\definecolor{lightblue}{cmyk}{0.83,0.24,0,0.12}
+
+\definecolor{lightblue}{rgb}{0.145,0.6666,1}
+\definecolor{blue}{RGB}{150,200,242}
+\definecolor{darkblue}{RGB}{68,92,170}
+%\definecolor{brown}{RGB}{245,236,215}
+%\definecolor{white}{RGB}{255,255,255}
+
+%\definecolor{lightblue}{rgb}{0.5,1,0.25}
+%\definecolor{lightblue}{rgb}{1,0.2,0.4}
+%\definecolor{lightblue}{rgb}{0,0.85,1}
+
+% Draw a video
+%\newlength{\FSZ}
+%\newcommand{\drawvideo}[3]{% [0 0.25 0.5 0.75 1 1.25 1.5]
+%   \noindent\pgfmathsetlength{\FSZ}{\linewidth/#2}
+%   \begin{tikzpicture}[outer sep=0pt,inner sep=0pt,x=\FSZ,y=\FSZ]
+%   \draw[color=lightblue!50!black] (0,0) node[outer sep=0pt,inner sep=0pt,text width=\linewidth,minimum height=0] (video) {\noindent#3};
+%   \path [fill=lightblue!50!black,line width=0pt] 
+%     (video.north west) rectangle ([yshift=\FSZ] video.north east) 
+%    \foreach \x in {1,2,...,#2} {
+%      {[rounded corners=0.6] ($(video.north west)+(-0.7,0.8)+(\x,0)$) rectangle +(0.4,-0.6)}
+%    }
+%;
+%   \path [fill=lightblue!50!black,line width=0pt] 
+%     ([yshift=-1\FSZ] video.south west) rectangle (video.south east) 
+%    \foreach \x in {1,2,...,#2} {
+%      {[rounded corners=0.6] ($(video.south west)+(-0.7,-0.2)+(\x,0)$) rectangle +(0.4,-0.6)}
+%    }
+%;
+%   \foreach \x in {1,...,#1} {
+%     \draw[color=lightblue!50!black] ([xshift=\x\linewidth/#1] video.north west) -- ([xshift=\x\linewidth/#1] video.south west);
+%   }
+%   \foreach \x in {0,#1} {
+%     \draw[color=lightblue!50!black] ([xshift=\x\linewidth/#1,yshift=1\FSZ] video.north west) -- ([xshift=\x\linewidth/#1,yshift=-1\FSZ] video.south west);
+%   }
+%   \end{tikzpicture}
+%}
+
+\hyphenation{resolution occlusions}
+%%
+\begin{poster}%
+  % Poster Options
+  {
+  % Show grid to help with alignment
+  grid=false,
+  % Column spacing
+  columns=3,
+  colspacing=1em,
+  % Color style
+  headerColorOne=blue,
+  borderColor=darkblue,
+  bgColorOne=white,
+  boxColorOne=white,
+  % Format of textbox
+  textborder=roundedleft,
+  % Format of text header
+  eyecatcher=true,
+  headerborder=open, %closed,
+  headerheight=0.12\textheight,
+%  textfont=\sc, An example of changing the text font
+  headershape=roundedright,
+  headershade=plain, %shadelr,
+  headerfont=\Large\bf\textsc, %Sans Serif
+  textfont={\setlength{\parindent}{1.5em}},
+  boxshade=plain,
+%  background=shade-tb,
+  background=plain,
+  linewidth=2pt
+  }
+  % Eye Catcher
+  %{\includegraphics[height=5em]{images/graph_occluded.pdf}} 
+  {}
+%  \includegraphics[height=6em]{fig/logo/ucla2.png} }
+%   \includegraphics[height=6em]{fig/logo/ttic.png}}
+  % Title
+  { {\huge Attention to Scale: Scale-aware Semantic Image Segmentation} }
+  % Authors
+  %{{\{ Brian.Amberg and Thomas.Vetter \}@unibas.ch}}
+  { \vspace{0.3cm} {\Large
+      \begin{tabular}{ccccc} 
+        Liang-Chieh Chen\textsuperscript{1} & Yi Yang\textsuperscript{2} & Jiang Wang\textsuperscript{2} & Wei Xu\textsuperscript{2} & Alan L. Yuille\textsuperscript{1,3} \\
+      & \textsuperscript{1}UCLA & \textsuperscript{2}Baidu USA & \textsuperscript{3} JHU
+    \end{tabular} }
+  }
+  % University logo
+  {}%   \includegraphics[height=4em]{fig/logo/google.pdf} }
+%  {\includegraphics[height=6em]{fig/logo/ut.png}}
+  %{% The makebox allows the title to flow into the logo, this is a hack because of the L shaped logo.
+  %  \includegraphics[height=9.0em]{images/logo}
+  %}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Now define the boxes that make up the poster
+%%%---------------------------------------------------------------------------
+%%% Each box has a name and can be placed absolutely or relatively.
+%%% The only inconvenience is that you can only specify a relative position 
+%%% towards an already declared box. So if you have a box attached to the 
+%%% bottom, one to the top and a third one which should be in between, you 
+%%% have to specify the top and bottom boxes before you specify the middle 
+%%% box.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %
+    % A coloured circle useful as a bullet with an adjustably strong filling
+  \newcommand{\colouredcircle}{%
+    \tikz{\useasboundingbox (-0.2em,-0.32em) rectangle(0.2em,0.32em); \draw[draw=black,fill=lightblue,line width=0.03em] (0,0) circle(0.18em);}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \headerbox{Motivation}{name=intro,column=0}{
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    Multi-scale features key of s-o-a semantic segmentation models.
+
+    \centering
+    \begin{tabular}{c c c}
+      {
+        \includegraphics[width=0.2\linewidth]{fig/attention/voc12/img/2008_008221.jpg}} &
+      {
+        \includegraphics[width=0.2\linewidth]{fig/attention/voc12/img/2007_002728.jpg}} &      
+      {
+        \includegraphics[width=0.15\linewidth]{fig/attention/coco/img/COCO_val2014_000000000395.jpg}} \\
+      {            
+        \includegraphics[width=0.2\linewidth]{fig/attention/voc12/gt/2008_008221.png}} &
+      {
+        \includegraphics[width=0.2\linewidth]{fig/attention/voc12/gt/2007_002728.png}} &
+      {
+        \includegraphics[width=0.15\linewidth]{fig/attention/coco/gt_tmp/COCO_val2014_000000000395.png}} \\
+      {\small
+      (a) small-scale person} &
+      {\small
+        (b) large-scale person} &
+      {\small
+        (c) persons of} \\
+      {\small
+        large-scale train} &
+      {\small
+        small-scale train} &
+      {\small
+        several scales} \\
+    \end{tabular}
+%  }
+
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \headerbox{Model illustration}{name=modelIllustration,column=0,below=intro}{
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    {
+    \centering
+    \begin{tabular}{c}
+      \includegraphics[width=0.85\linewidth]{fig/attention/model_illustration/fig4.pdf} \\
+    \end{tabular}
+
+    \centering
+    \begin{tabular}{c}
+      \includegraphics[width=0.85\linewidth]{fig/attention/model_illustration/fig5_2.pdf} \\
+    \end{tabular}
+    
+    \centering
+    \begin{tabular}{c}
+      \includegraphics[width=0.9\linewidth]{fig/attention/model_illustration/our_fig4.pdf} \\
+    \end{tabular}
+    }
+
+  }
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\headerbox{Attention model: multi-scale features}{name=att,column=1}{
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \begin{itemize}
+        \setlength{\itemsep}{-5pt}
+    \item Suppose input image resized to several scales $s \in \{1, ..., S\}$. 
+    \item Input with scale $s$ produces a score map $f^s_{i,c}$, ($i$ over pixels, and $c$ over object classes).
+    \item Let $g_{i,c}$ be the weighted sum of score maps at $(i,c)$ for all scales
+  \end{itemize}
+
+    \begin{equation}
+      \label{eq:weighted_sum}
+      g_{i,c} = \sum_{s=1}^S w^s_{i} \cdot f^s_{i,c}
+    \end{equation}
+    
+    The weight $w^s_i$ is computed by
+    \begin{equation}
+      w^s_{i} = \frac{\exp(h^s_{i})}{\sum_{t=1}^S \exp(h^t_{i})}
+    \end{equation}
+    where $h^s_{i}$ is score map by {\it attention} model.
+
+    \vspace{-0.3cm}
+    \begin{itemize}
+              \setlength{\itemsep}{-5pt}
+      \item $w^s_{i}$ reflects importance of feature at position $i$ and scale $s$.
+      \item Visualize attention for each scale by visualizing $w^s_{i}$.
+      \item Average- or max-pooling over scales are two special cases.
+    \end{itemize}
+
+    
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\headerbox{Learned attention: Max vs. Attention}{name=learned_att,column=1,row=0, below=att}{
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    \centering          
+    \scalebox{1}{
+    \begin{tabular}{c c c | c c c}
+      & \includegraphics[height=0.1\linewidth, width=0.1\linewidth]{fig/attention/voc10_part/img/2008_000034.jpg} & & & \includegraphics[height=0.1\linewidth, width=0.1\linewidth]{fig/attention/voc10_part/img/2008_003344.jpg} & \\
+      {\includegraphics[height=0.1\linewidth, width=0.12\linewidth]{fig/attention/voc10_part/att1/2008_000034_max.pdf}} &
+      {\includegraphics[height=0.1\linewidth, width=0.12\linewidth]{fig/attention/voc10_part/att2/2008_000034_max.pdf}} &
+      {\includegraphics[height=0.1\linewidth, width=0.12\linewidth]{fig/attention/voc10_part/att3/2008_000034_max.pdf}} &
+      {\includegraphics[height=0.1\linewidth, width=0.12\linewidth]{fig/attention/voc10_part/att1/2008_003344_max.pdf}} &
+      {\includegraphics[height=0.1\linewidth, width=0.12\linewidth]{fig/attention/voc10_part/att2/2008_003344_max.pdf}} &
+      {\includegraphics[height=0.1\linewidth, width=0.12\linewidth]{fig/attention/voc10_part/att3/2008_003344_max.pdf}} \\
+      {\includegraphics[height=0.1\linewidth, width=0.12\linewidth]{fig/attention/voc10_part/att1/2008_000034.pdf}} &
+      {\includegraphics[height=0.1\linewidth, width=0.12\linewidth]{fig/attention/voc10_part/att2/2008_000034.pdf}} &
+      {\includegraphics[height=0.1\linewidth, width=0.12\linewidth]{fig/attention/voc10_part/att3/2008_000034.pdf}} &
+      {\includegraphics[height=0.1\linewidth, width=0.12\linewidth]{fig/attention/voc10_part/att1/2008_003344.pdf}} &
+      {\includegraphics[height=0.1\linewidth, width=0.12\linewidth]{fig/attention/voc10_part/att2/2008_003344.pdf}} &
+      {\includegraphics[height=0.1\linewidth, width=0.12\linewidth]{fig/attention/voc10_part/att3/2008_003344.pdf}} \\
+                      {{\tiny (a) Scale-1 Att.}} &
+                      {{\tiny (b) Scale-0.75 Att.}} &
+                      {{\tiny (c) Scale-0.5 Att.}} &
+                      {{\tiny (a) Scale-1 Att.}} &
+                      {{\tiny (b) Scale-0.75 Att.}} &
+                      {{\tiny (c) Scale-0.5 Att.}} \\
+    \end{tabular}
+    }
+
+    \begin{itemize}
+      \setlength{\itemsep}{-5pt}
+    \item {Scale-1 attention $\rightarrow$ small-scale objects.}
+    \item {Scale-0.75 attention $\rightarrow$ middle-scale objects.}
+    \item {Scale-0.5 attention $\rightarrow$ large-scale objects or background.}
+    \end{itemize}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\headerbox{Extra Supervision}{name=extra,column=1,row=0, below=learned_att}{
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  {
+  \centering
+  \begin{tabular}{c}
+    \includegraphics[width=0.85\linewidth]{fig/attention/model_illustration/add_sup_fig4.pdf} \\
+  \end{tabular}
+  }
+
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\headerbox{PASCAL VOC 2012}{name=voc_test,column=2,row=0}{
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \begin{tabular}{c}
+    {
+    \centering
+    \addtolength{\tabcolsep}{2.5pt}
+    \begin{tabular}{l c c}
+      \toprule[0.2 em]
+      \multicolumn{2}{l}{Baseline: DeepLab-LargeFOV} & 67.58  \\
+      \toprule[0.2 em]
+      {\bf Merging Method} &  & w/ E-Supv \\
+      \midrule
+      {\it Scales = \{1, 0.75, 0.5\}} & & \\
+      Max-Pooling & 69.70 & 70.06 \\
+      Average-Pooling & 68.82 & 70.55 \\
+      Attention & 69.47 & {\bf 71.42} \\
+      \bottomrule[0.1 em]
+    \end{tabular}
+    } \\
+    (a) val set \\
+    {
+      \centering
+      \addtolength{\tabcolsep}{2.5pt}
+      \begin{tabular} {l | c}
+        \toprule[0.2 em]
+                {\bf Method} & mIOU \\
+                \midrule \midrule
+                DeepLab-CRF-COCO-LargeFOV & 72.7 \\
+                DeepLab-MSc-CRF-COCO-LargeFOV & 73.6 \\
+                \midrule
+                DeepLab-CRF-COCO-LargeFOV-{\bf Attention} & 75.1 \\
+                DeepLab-CRF-COCO-LargeFOV-{\bf Attention}+ & 75.7 \\
+                \bottomrule[0.1 em]
+      \end{tabular}
+    } \\
+    (b) test set \\
+  \end{tabular}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\headerbox{Segmentation Results}{name=seg_results,column=2,row=0, below=voc_test}{
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \hspace{-0.8cm}
+  \centering
+  \scalebox{1}{
+  \begin{tabular}{c c c c c c}
+   \includegraphics[height=0.09\linewidth]{fig/attention/voc12/img/2010_004795.jpg} &
+   {\includegraphics[height=0.09\linewidth]{fig/attention/voc12/res_baseline/2010_004795.png}} &
+   {\includegraphics[height=0.09\linewidth]{fig/attention/voc12/res_sharenet/2010_004795.png}} &
+   {\includegraphics[height=0.09\linewidth]{fig/attention/voc12/att1/2010_004795.pdf}} &
+   {\includegraphics[height=0.09\linewidth]{fig/attention/voc12/att2/2010_004795.pdf}} &
+   {\includegraphics[height=0.09\linewidth]{fig/attention/voc12/att3/2010_004795.pdf}} \\
+   \includegraphics[height=0.09\linewidth]{fig/attention/voc12/img/2011_001642.jpg} &
+      {\includegraphics[height=0.09\linewidth]{fig/attention/voc12/res_baseline/2011_001642.png}} &
+      {\includegraphics[height=0.09\linewidth]{fig/attention/voc12/res_sharenet/2011_001642.png}} &
+      {\includegraphics[height=0.09\linewidth]{fig/attention/voc12/att1/2011_001642.pdf}} &
+      {\includegraphics[height=0.09\linewidth]{fig/attention/voc12/att2/2011_001642.pdf}} &
+      {\includegraphics[height=0.09\linewidth]{fig/attention/voc12/att3/2011_001642.pdf}} \\
+   \includegraphics[height=0.09\linewidth]{fig/attention/voc12/img/2011_002121.jpg} &
+      {\includegraphics[height=0.09\linewidth]{fig/attention/voc12/res_baseline/2011_002121.png}} &
+      {\includegraphics[height=0.09\linewidth]{fig/attention/voc12/res_sharenet/2011_002121.png}} &
+      {\includegraphics[height=0.09\linewidth]{fig/attention/voc12/att1/2011_002121.pdf}} &
+      {\includegraphics[height=0.09\linewidth]{fig/attention/voc12/att2/2011_002121.pdf}} &
+      {\includegraphics[height=0.09\linewidth]{fig/attention/voc12/att3/2011_002121.pdf}} \\
+   \includegraphics[height=0.09\linewidth]{fig/attention/voc12/img/2011_003256.jpg} &
+      {\includegraphics[height=0.09\linewidth]{fig/attention/voc12/res_baseline/2011_003256.png}} &
+      {\includegraphics[height=0.09\linewidth]{fig/attention/voc12/res_sharenet/2011_003256.png}} &
+      {\includegraphics[height=0.09\linewidth]{fig/attention/voc12/att1/2011_003256.pdf}} &
+      {\includegraphics[height=0.09\linewidth]{fig/attention/voc12/att2/2011_003256.pdf}} &
+      {\includegraphics[height=0.09\linewidth]{fig/attention/voc12/att3/2011_003256.pdf}} \\
+   \includegraphics[height=0.09\linewidth]{fig/attention/voc12/img/2007_008260.jpg} &
+      {\includegraphics[height=0.09\linewidth]{fig/attention/voc12/res_baseline/2007_008260.png}} &
+      {\includegraphics[height=0.09\linewidth]{fig/attention/voc12/res_sharenet/2007_008260.png}} &
+      {\includegraphics[height=0.09\linewidth]{fig/attention/voc12/att1/2007_008260.pdf}} &
+      {\includegraphics[height=0.09\linewidth]{fig/attention/voc12/att2/2007_008260.pdf}} &
+      {\includegraphics[height=0.09\linewidth]{fig/attention/voc12/att3/2007_008260.pdf}} \\
+      {\tiny (a) Image} & 
+      {{\tiny (b) Baseline}} & 
+      {{\tiny (c) Our model}} & 
+      {{\tiny (d) Scale-1 Att.}} & 
+      {{\tiny (e) Scale-0.75 Att.}} &
+      {{\tiny (f) Scale-0.5 Att.}} \\
+  \end{tabular}
+  }
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\headerbox{Conclusion}{name=conc,column=2,row=0, below=seg_results}{
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\hspace{-8mm}\begin{minipage}{\linewidth}
+  \begin{itemize}
+    \setlength{\itemsep}{-5pt}
+  \item Using multi-scale inputs > single scale input. 
+  \item Attention model brings better performance and allows to visualize the importance of features.
+  \item Adding extra supervision is essential for better performance.
+  \item Try it out! Source code and trained models available at {\color{red} \url{http://liangchiehchen.com/projects/DeepLab.html}}.
+  \end{itemize}
+\end{minipage}
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\headerbox{References}{name=references,column=2,below=conc}{
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   \vspace{-0.1cm}
+    \tiny
+    %\scriptsize
+    \bibliographystyle{ieee}
+    \renewcommand{\section}[2]{\vskip -0.05em}
+      \begin{thebibliography}{1}\itemsep=-0.7em
+      \setlength{\baselineskip}{0.3em}
+      \bibitem{farabet2013learning}
+        C.~Farabet et~al.
+        \newblock Learning hierarchical features for scene labeling.
+        \newblock {\em PAMI}, 2013.
+      \bibitem{bahdanau2014neural}
+        D.~Bahdanau, K.~Cho, and Y.~Bengio.
+        \newblock Neural machine translation by jointly learning to align and
+        translate.
+        \newblock In {\em ICLR}, 2015.
+      \bibitem{lin2015efficient}
+        G.~Lin et~al.
+        \newblock Efficient piecewise training of deep structured models for semantic
+        segmentation.
+        \newblock {\em arXiv:1504.01013}, 2015.
+
+      \end{thebibliography}
+}
+
+
+\end{poster}
+
+\end{document}

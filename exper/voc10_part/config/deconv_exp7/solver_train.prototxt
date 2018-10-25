@@ -1,0 +1,15 @@
+train_net: "voc10_part/config/deconv_exp7/train_train.prototxt"
+
+lr_policy: "step"
+gamma: 0.1
+stepsize: 10000
+base_lr: 0.001
+
+display: 10
+max_iter: 30000
+momentum: 0.99
+weight_decay: 0
+
+snapshot: 10000
+snapshot_prefix: "voc10_part/model/deconv_exp7/train"
+solver_mode: GPU

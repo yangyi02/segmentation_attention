@@ -1,0 +1,677 @@
+%!TEX root = top.tex
+\section{Experimental Evaluations}
+\label{sec:exp}
+
+In this section, after presenting the common setting for all the experiments, we evaluate our method on three datasets, including PASCAL-Person-Part \cite{chen_cvpr14}, PASCAL VOC 2012 \cite{everingham2014pascal}, and a subset of MS-COCO 2014 \cite{lin2014microsoft}.
+
+%\paragraph{Network architectures} 
+\textbf{Network architectures:} Our network is based on the publicly available model, DeepLab-LargeFOV \cite{chen2014semantic}, which modifies VGG-16 net \cite{simonyan2014very} to be FCN \cite{long2014fully}. We employ the same settings for DeepLab-LargeFOV as \cite{chen2014semantic}.
+
+%DeepLab-MSc-LargeFOV is a type of {\it skip-net}, which also adopts two-step training process. We employ the same settings for both models as \cite{chen2014semantic}.
+
+%\paragraph{Training} 
+\textbf{Training:} SGD with mini-batch is used for training. We set the mini-batch size of 30 images and initial learning rate of 0.001 (0.01 for the final classifier layer). The learning rate is multiplied by 0.1 after 2000 iterations. We use the momentum of 0.9 and weight decay of 0.0005. Fine-tuning our network on all the reported experiments takes about 21 hours on an NVIDIA Tesla K40 GPU. During training, our model takes all scaled inputs and performs training jointly. Thus, the total training time is twice that of a vanilla DeepLab-LargeFOV. The average inference time for one PASCAL image is 350 ms.
+
+%\paragraph{Metric} 
+\textbf{Evaluation metric:} The performance is measured in terms of pixel intersection-over-union (IOU) averaged across classes \cite{everingham2014pascal}.
+
+%\paragraph{Reproducibility} 
+\textbf{Reproducibility:} The proposed methods are implemented by extending Caffe framework \cite{jia2014caffe}. The code and models are available at \url{http://liangchiehchen.com/projects/DeepLab.html}.
+
+%\paragraph{Experiments} 
+\textbf{Experiments:} To demonstrate the effectiveness of our model, we mainly experiment along three axes: (1) multi-scale inputs (from one scale to three scales with $s \in \{1, 0.75, 0.5\}$), (2) different methods (average-pooling, max-pooling, or attention model) to merge multi-scale features, and (3) training with or without extra supervision.
+
+%, and (4) applying multi-scale inputs for DeepLab-MSc-LargeFOV.
+
+\subsection{PASCAL-Person-Part}
+
+\begin{table}
+  \centering
+  \rowcolors{2}{}{yelloworange!25}
+  \addtolength{\tabcolsep}{2.5pt}
+    \begin{tabular}{l c c}
+      \toprule[0.2 em]
+      \multicolumn{2}{l}{Baseline: DeepLab-LargeFOV} & 51.91  \\
+      \toprule[0.2 em]
+      {\bf Merging Method} &  & w/ E-Supv \\
+      \midrule
+      \midrule
+      {\it Scales = \{1, 0.5\}} & & \\
+      Max-Pooling & 52.90 & 55.26 \\
+      Average-Pooling & 52.71 & 55.17 \\
+      Attention & 53.49 & 55.85 \\
+      \midrule
+      {\it Scales = \{1, 0.75, 0.5\}} & & \\
+      Max-Pooling & 53.02 & 55.78\\
+      Average-Pooling & 52.56 & 55.72 \\
+      Attention & 53.12 & {\bf 56.39} \\
+      \bottomrule[0.1 em]
+    \end{tabular}
+    \vspace{1pt}
+    \caption{Results on PASCAL-Person-Part {\it validation} set. E-Supv: extra supervision.}
+    \label{tab:deeplab_part}
+\end{table}
+
+\begin{table}
+  \centering
+  %\scriptsize
+  \small
+  \rowcolors{2}{}{yelloworange!25}
+  \addtolength{\tabcolsep}{-2.5pt}
+    \begin{tabular}{lccccccc}
+    \toprule[0.2 em]
+    Head & Torso & U-arms & L-arms & U-legs & L-legs & Bkg & Avg \\
+    \midrule
+    81.47 & 59.06 & 44.15 & 42.50 & 38.28 & 35.62 & 93.65 & 56.39 \\
+    \bottomrule[0.1 em]
+    \end{tabular}
+    \caption{Per-part results on PASCAL-Person-Part {\it validation} set with our attention model.}
+    \label{tab:deeplab_everypart}
+\end{table}
+
+%\paragraph{Dataset} 
+\textbf{Dataset:} We perform experiments on semantic part segmentation, annotated by \cite{chen_cvpr14} from the PASCAL VOC 2010 dataset. Few works \cite{wang2014semantic, wang2015joint} have worked on the animal part segmentation for the dataset. On the other hand, we focus on the {\it person} part for the dataset, which contains more training data and large scale variation. Specifically, the dataset contains detailed part annotations for every person, including eyes, nose, \etc. We merge the annotations to be Head, Torso, Upper/Lower Arms and Upper/Lower Legs, resulting in six person part classes and one background class. We only use those images containing persons for training (1716 images) and validation (1817 images).
+
+%\paragraph{Improve DeepLab} 
+\textbf{Improvement over DeepLab:} We report the results in \tabref{tab:deeplab_part} when employing DeepLab-LargeFOV as the baseline. We find that using two input scales improves over using only one input scale, and it is also slightly better than using three input scales combined with average-pooling or attention model. We hypothesize that when merging three scale inputs, the features to be merged must be sufficiently discriminative or direct fusion degrades performance. On the other hand,
+max-pooling seems robust to this effect. No matter how many scales are used, our attention model yields better results than average-pooling and max-pooling. We further visualize the weight maps produced by max-pooling and our attention model in \figref{fig:max_vs_ours}, which clearly shows that our attention model learns better interpretable weight maps for different scales. Moreover, we find that by introducing extra supervision to the FCNs for
+each scale significantly improves the performance (see the column {\it w/ E-Supv}), regardless of what merging scheme is employed. The results show that adding extra supervision is essential for merging multi-scale features. Finally, we compare our proposed method with DeepLab-MSc-LargeFOV, which exploits the features from the intermediate layers for classification (MSc denotes Multi-Scale features). Note DeepLab-MSc-LargeFOV is a type of {\it skip-net}. Our best model ($56.39\%$) attains $2.67\%$ better performance than DeepLab-MSc-LargeFOV ($53.72\%$).
+
+%% \begin{table}[!t]
+%%   \centering
+%% %  \rowcolors{2}{}{yelloworange!25}
+%%   \addtolength{\tabcolsep}{2.5pt}
+%%     \begin{tabular}{l c c}
+%%       \toprule[0.2 em]
+%%       \multicolumn{2}{l}{Baseline: DeepLab-MSc-LargeFOV} & 53.72  \\
+%%       \toprule[0.2 em]
+%%       {\bf Merging Method} &  & w/ E-Supv \\
+%%       \midrule
+%%       \midrule
+%%       {\it Scales = \{1, 0.5\}} & & \\
+%%       Max-Pooling & 53.98 & 54.84 \\
+%%       Average-Pooling & 54.90 & 55.33 \\
+%%       Attention & 54.70 & 55.63 \\
+%%       \midrule
+%%       {\it Scales = \{1, 0.75, 0.5\}} & & \\
+%%       Max-Pooling & 54.53 & 55.31\\
+%%       Average-Pooling & 55.14 & 55.74 \\
+%%       Attention & 54.78 & 55.73 \\
+%%       \bottomrule[0.1 em]
+%%     \end{tabular}
+%%     \caption{Results on PASCAL-Person-Part {\it validation} set with DeepLab-MSc-LargeFOV as baseline. E-Supv: extra supervision.}
+%%     \label{tab:deeplab_msc_part}
+%% \end{table}
+
+%% \paragraph{Improve DeepLab-MSc} We have also experimented the case where we replace the DeepLab-LargeFOV baseline with DeepLab-MSc-LargeFOV, which exploits the features from the intermediate network layers for classification (MSc denotes Multi-Scale features). The results are reported in \tabref{tab:deeplab_msc_part}. We observe similar results, but the best performance (with three scales, attention model, and extra supervision) is $0.66\%$ worse than the case where we employ DeepLab-LargeFOV as baseline.
+
+%% \paragraph{Improve DeepLab-MSc} Next, we replace the baseline with DeepLab-MSc-LargeFOV and report the results in \tabref{tab:deeplab_msc_part}. The performance keeps improving when adding more scale inputs for all the merging schemes. The average-pooling scheme leads to the best performance without extra supervision. When extra supervision is added (column {\it w/ E-Supv}), using attention model to merge the multi-scale features becomes comparable to average-pooling scheme.
+
+%% Comparing \tabref{tab:deeplab_part} and \tabref{tab:deeplab_msc_part}, we find that when extra supervision is not introduced, feeding multi-scale inputs to DeepLab-MSc-LargeFOV (\ie, combine skip-net and share-net) yields better performance than for DeepLab-LargeFOV. However, when extra supervision is injected during training, employing three input scales and attention model with DeepLab-LargeFOV gives us the best result.
+
+\begin{figure*} 
+  \centering          
+  \begin{tabular}{c c c | c c c}
+    & \includegraphics[height=0.1\linewidth, width=0.1\linewidth]{fig/voc10_part/img/2008_000034.jpg} & & & \includegraphics[height=0.1\linewidth, width=0.1\linewidth]{fig/voc10_part/img/2008_003344.jpg} & \\
+   \includegraphics[height=0.1\linewidth, width=0.14\linewidth]{fig/voc10_part/att1/2008_000034_max.pdf} &
+   \includegraphics[height=0.1\linewidth, width=0.14\linewidth]{fig/voc10_part/att2/2008_000034_max.pdf} &
+   \includegraphics[height=0.1\linewidth, width=0.14\linewidth]{fig/voc10_part/att3/2008_000034_max.pdf} &
+   \includegraphics[height=0.1\linewidth, width=0.14\linewidth]{fig/voc10_part/att1/2008_003344_max.pdf} &
+   \includegraphics[height=0.1\linewidth, width=0.14\linewidth]{fig/voc10_part/att2/2008_003344_max.pdf} &
+   \includegraphics[height=0.1\linewidth, width=0.14\linewidth]{fig/voc10_part/att3/2008_003344_max.pdf} \\
+   \includegraphics[height=0.1\linewidth, width=0.14\linewidth]{fig/voc10_part/att1/2008_000034.pdf} &
+   \includegraphics[height=0.1\linewidth, width=0.14\linewidth]{fig/voc10_part/att2/2008_000034.pdf} &
+   \includegraphics[height=0.1\linewidth, width=0.14\linewidth]{fig/voc10_part/att3/2008_000034.pdf} &
+   \includegraphics[height=0.1\linewidth, width=0.14\linewidth]{fig/voc10_part/att1/2008_003344.pdf} &
+   \includegraphics[height=0.1\linewidth, width=0.14\linewidth]{fig/voc10_part/att2/2008_003344.pdf} &
+   \includegraphics[height=0.1\linewidth, width=0.14\linewidth]{fig/voc10_part/att3/2008_003344.pdf} \\
+   {\scriptsize (a) Scale-1 Attention} &
+   {\scriptsize (b) Scale-0.75 Attention} &
+   {\scriptsize (c) Scale-0.5 Attention} &
+   {\scriptsize (a) Scale-1 Attention} &
+   {\scriptsize (b) Scale-0.75 Attention} &
+   {\scriptsize (c) Scale-0.5 Attention} \\
+  \end{tabular}
+  \vspace{1pt}
+  \caption{Weight maps produced by max-pooling (row 2) and by attention model (row 3). Notice that our attention model learns better interpretable weight maps for different scales. (a) Scale-1 attention (\ie, weight map for scale $s=1$) captures small-scale objects, (b) Scale-0.75 attention usually focuses on middle-scale objects, and (c) Scale-0.5 attention emphasizes on background contextual information.}
+  \label{fig:max_vs_ours}
+\end{figure*}  
+
+\begin{figure*}
+  \centering
+  \begin{tabular}{c c c c c c}
+   \multicolumn{6}{c}{\includegraphics[width=0.5\linewidth]{fig/voc10_part/legend.pdf}} \\
+   \includegraphics[height=0.1\linewidth]{fig/voc10_part/img/2010_004786.jpg} &
+   \includegraphics[height=0.1\linewidth]{fig/voc10_part/res_baseline/2010_004786.png} &
+   \includegraphics[height=0.1\linewidth]{fig/voc10_part/res_sharenet/2010_004786.png} &
+   \includegraphics[height=0.1\linewidth]{fig/voc10_part/att1/2010_004786.pdf} &
+   \includegraphics[height=0.1\linewidth]{fig/voc10_part/att2/2010_004786.pdf} &
+   \includegraphics[height=0.1\linewidth]{fig/voc10_part/att3/2010_004786.pdf} \\
+   %% \includegraphics[height=0.10\linewidth]{fig/voc10_part/img/2010_003632.jpg} &
+   %% \includegraphics[height=0.10\linewidth]{fig/voc10_part/res_baseline/2010_003632.png} &
+   %% \includegraphics[height=0.10\linewidth]{fig/voc10_part/res_sharenet/2010_003632.png} &
+   %% \includegraphics[height=0.10\linewidth]{fig/voc10_part/att1/2010_003632.pdf} &
+   %% \includegraphics[height=0.10\linewidth]{fig/voc10_part/att2/2010_003632.pdf} &
+   %% \includegraphics[height=0.10\linewidth]{fig/voc10_part/att3/2010_003632.pdf} \\
+   \includegraphics[height=0.1\linewidth]{fig/voc10_part/img/2010_002927.jpg} &
+   \includegraphics[height=0.1\linewidth]{fig/voc10_part/res_baseline/2010_002927.png} &
+   \includegraphics[height=0.1\linewidth]{fig/voc10_part/res_sharenet/2010_002927.png} &
+   \includegraphics[height=0.1\linewidth]{fig/voc10_part/att1/2010_002927.pdf} &
+   \includegraphics[height=0.1\linewidth]{fig/voc10_part/att2/2010_002927.pdf} &
+   \includegraphics[height=0.1\linewidth]{fig/voc10_part/att3/2010_002927.pdf} \\
+   %% \includegraphics[height=0.1\linewidth]{fig/voc10_part/img/2010_002510.jpg} &
+   %% \includegraphics[height=0.1\linewidth]{fig/voc10_part/res_baseline/2010_002510.png} &
+   %% \includegraphics[height=0.1\linewidth]{fig/voc10_part/res_sharenet/2010_002510.png} &
+   %% \includegraphics[height=0.1\linewidth]{fig/voc10_part/att1/2010_002510.pdf} &
+   %% \includegraphics[height=0.1\linewidth]{fig/voc10_part/att2/2010_002510.pdf} &
+   %% \includegraphics[height=0.1\linewidth]{fig/voc10_part/att3/2010_002510.pdf} \\
+   %% \includegraphics[height=0.10\linewidth]{fig/voc10_part/img/2008_003610.jpg} &
+   %% \includegraphics[height=0.10\linewidth]{fig/voc10_part/res_baseline/2008_003610.png} &
+   %% \includegraphics[height=0.10\linewidth]{fig/voc10_part/res_sharenet/2008_003610.png} &
+   %% \includegraphics[height=0.10\linewidth]{fig/voc10_part/att1/2008_003610.pdf} &
+   %% \includegraphics[height=0.10\linewidth]{fig/voc10_part/att2/2008_003610.pdf} &
+   %% \includegraphics[height=0.10\linewidth]{fig/voc10_part/att3/2008_003610.pdf} \\
+   %% \includegraphics[height=0.10\linewidth]{fig/voc10_part/img/2008_005884.jpg} &
+   %% \includegraphics[height=0.10\linewidth]{fig/voc10_part/res_baseline/2008_005884.png} &
+   %% \includegraphics[height=0.10\linewidth]{fig/voc10_part/res_sharenet/2008_005884.png} &
+   %% \includegraphics[height=0.10\linewidth]{fig/voc10_part/att1/2008_005884.pdf} &
+   %% \includegraphics[height=0.10\linewidth]{fig/voc10_part/att2/2008_005884.pdf} &
+   %% \includegraphics[height=0.10\linewidth]{fig/voc10_part/att3/2008_005884.pdf} \\
+   %% \includegraphics[height=0.10\linewidth]{fig/voc10_part/img/2008_003228.jpg} &
+   %% \includegraphics[height=0.10\linewidth]{fig/voc10_part/res_baseline/2008_003228.png} &
+   %% \includegraphics[height=0.10\linewidth]{fig/voc10_part/res_sharenet/2008_003228.png} &
+   %% \includegraphics[height=0.10\linewidth]{fig/voc10_part/att1/2008_003228.pdf} &
+   %% \includegraphics[height=0.10\linewidth]{fig/voc10_part/att2/2008_003228.pdf} &
+   %% \includegraphics[height=0.10\linewidth]{fig/voc10_part/att3/2008_003228.pdf} \\
+   %% \includegraphics[height=0.087\linewidth]{fig/voc10_part/img/2008_000579.jpg} &
+   %% \includegraphics[height=0.087\linewidth]{fig/voc10_part/res_baseline/2008_000579.png} &
+   %% \includegraphics[height=0.087\linewidth]{fig/voc10_part/res_sharenet/2008_000579.png} &
+   %% \includegraphics[height=0.087\linewidth]{fig/voc10_part/att1/2008_000579.pdf} &
+   %% \includegraphics[height=0.087\linewidth]{fig/voc10_part/att2/2008_000579.pdf} &
+   %% \includegraphics[height=0.087\linewidth]{fig/voc10_part/att3/2008_000579.pdf} \\
+   \includegraphics[height=0.1\linewidth]{fig/voc10_part/img/2010_005293.jpg} &
+   \includegraphics[height=0.1\linewidth]{fig/voc10_part/res_baseline/2010_005293.png} &
+   \includegraphics[height=0.1\linewidth]{fig/voc10_part/res_sharenet/2010_005293.png} &
+   \includegraphics[height=0.1\linewidth]{fig/voc10_part/att1/2010_005293.pdf} &
+   \includegraphics[height=0.1\linewidth]{fig/voc10_part/att2/2010_005293.pdf} &
+   \includegraphics[height=0.1\linewidth]{fig/voc10_part/att3/2010_005293.pdf} \\
+
+   %% \includegraphics[height=0.10\linewidth]{fig/voc10_part/img/2008_006148.jpg} &
+   %% \includegraphics[height=0.10\linewidth]{fig/voc10_part/res_baseline/2008_006148.png} &
+   %% \includegraphics[height=0.10\linewidth]{fig/voc10_part/res_sharenet/2008_006148.png} &
+   %% \includegraphics[height=0.10\linewidth]{fig/voc10_part/att1/2008_006148.pdf} &
+   %% \includegraphics[height=0.10\linewidth]{fig/voc10_part/att2/2008_006148.pdf} &
+   %% \includegraphics[height=0.10\linewidth]{fig/voc10_part/att3/2008_006148.pdf} \\
+
+   %% \includegraphics[height=0.10\linewidth]{fig/voc10_part/img/2008_007585.jpg} &
+   %% \includegraphics[height=0.10\linewidth]{fig/voc10_part/res_baseline/2008_007585.png} &
+   %% \includegraphics[height=0.10\linewidth]{fig/voc10_part/res_sharenet/2008_007585.png} &
+   %% \includegraphics[height=0.10\linewidth]{fig/voc10_part/att1/2008_007585.pdf} &
+   %% \includegraphics[height=0.10\linewidth]{fig/voc10_part/att2/2008_007585.pdf} &
+   %% \includegraphics[height=0.10\linewidth]{fig/voc10_part/att3/2008_007585.pdf} \\
+   \hline
+   \includegraphics[height=0.10\linewidth]{fig/voc10_part/img/2008_000481.jpg} &
+   \includegraphics[height=0.10\linewidth]{fig/voc10_part/res_baseline/2008_000481.png} &
+   \includegraphics[height=0.10\linewidth]{fig/voc10_part/res_sharenet/2008_000481.png} &
+   \includegraphics[height=0.10\linewidth]{fig/voc10_part/att1/2008_000481.pdf} &
+   \includegraphics[height=0.10\linewidth]{fig/voc10_part/att2/2008_000481.pdf} &
+   \includegraphics[height=0.10\linewidth]{fig/voc10_part/att3/2008_000481.pdf} \\
+   \includegraphics[height=0.10\linewidth]{fig/voc10_part/img/2008_000522.jpg} &
+   \includegraphics[height=0.10\linewidth]{fig/voc10_part/res_baseline/2008_000522.png} &
+   \includegraphics[height=0.10\linewidth]{fig/voc10_part/res_sharenet/2008_000522.png} &
+   \includegraphics[height=0.10\linewidth]{fig/voc10_part/att1/2008_000522.pdf} &
+   \includegraphics[height=0.10\linewidth]{fig/voc10_part/att2/2008_000522.pdf} &
+   \includegraphics[height=0.10\linewidth]{fig/voc10_part/att3/2008_000522.pdf} \\
+   {\scriptsize (a) Image} & 
+   {\scriptsize (b) Baseline} & 
+   {\scriptsize (c) Our model} & 
+   {\scriptsize (d) Scale-1 Attention} & 
+   {\scriptsize (e) Scale-0.75 Attention} &
+   {\scriptsize (f) Scale-0.5 Attention} \\
+  \end{tabular}
+  \vspace{1pt}
+  \caption{Results on PASCAL-Person-Part {\it validation} set. DeepLab-LargeFOV with one scale input is used as the baseline. Our model employs three scale inputs, attention model and extra supervision. Scale-1 attention captures small-scale parts, scale-0.75 attention catches middle-scale torsos and legs, while scale-0.5 attention focuses on large-scale legs and background. Bottom two rows show failure examples.}
+  \label{fig:pascal_part_results}  
+\end{figure*}
+
+%\paragraph{Design choices} 
+\textbf{Design choices:} For all the experiments reported in this work, our proposed attention model takes as input the convolutionalized $fc_7$ features \cite{simonyan2014very}, and employs a FCN consisting of two layers (the first layer has 512 filters with kernel size $\by{3}{3}$ and the second layer has $S$ filters with kernel size $\by{1}{1}$, where $S$ is the number of scales employed). We have experimented with different settings, including using only one layer for the attention model,
+changing the kernel of the first layer to be $\by{1}{1}$, and varying the number of filters for the first layer. The performance does not vary too much; the degradation ranges from $0.1 \%$ to $0.4 \%$. Furthermore, we find that using $fc_8$ as features for the attention model results in worse performance (drops $\sim 0.5\%$) with similar results for $fc_6$ and $fc_7$. We also tried adding one more scale (four scales in total: $s \in \{1, 0.75, 0.5, 0.25\}$), however,
+the performance drops by $0.5 \%$. We believe the score maps produced from scale $s=0.25$ were simply too small to be useful.
+
+%\paragraph{Qualitative results} 
+\textbf{Qualitative results:} We visualize the part segmentation results as well as the weight maps produced by the attention model in \figref{fig:pascal_part_results}. Merging the multi-scale features with the attention model yields not only better performance but also more interpretable weight maps. Specifically, scale-1 attention (\ie, the weight map learned by attention model for scale $s=1$) usually focuses on small-scale objects, scale-0.75 attention concentrates on middle-scale objects, and scale-0.5 attention usually puts large weight on large-scale objects or background, since it is easier to capture the largest scale objects or background contextual information when the image is shrunk to be half of the original resolution.
+
+%\paragraph{Failure modes} 
+\textbf{Failure modes:} We show two failure examples in the bottom of \figref{fig:pascal_part_results}. The failure examples are due to the extremely difficult human poses or the confusion between cloth and person parts. The first problem may be resolved by acquiring more data, while the second one is challenging because person parts are usually covered by clothes.
+
+%\paragraph{Supplementary material} 
+\textbf{Supplementary materials:} In the supplementary materials, we apply our trained model to some videos from MPII Human Pose dataset \cite{andriluka14cvpr}. The model is not fine-tuned on the dataset, and the result is run frame-by-frame. As shown in the video, even for images from another dataset, our model is able to produce reasonably and visually good part segmentation results and it infers meaningful attention for different scales. Additionally, we provide more qualitative results
+for all datasets in the supplementary materials.
+
+%Furthermore, we also experiment our proposed methods on a subset of MS-COCO 2014 dataset \cite{lin2014microsoft}, and provide more qualitative results for all datasets.
+
+\subsection{PASCAL VOC 2012}
+%\paragraph{Dataset} 
+\textbf{Dataset:} The PASCAL VOC 2012 segmentation benchmark \cite{everingham2014pascal} consists of 20 foreground object classes and one background class. Following the same experimental protocol \cite{chen2014semantic, dai2015boxsup, zheng2015conditional}, we augment the original training set from the annotations by \cite{hariharan2011semantic}. We report the results on the original PASCAL VOC 2012 validation set and test set.
+
+\begin{table}
+  \centering
+  \rowcolors{2}{}{yelloworange!25}
+  \addtolength{\tabcolsep}{2.5pt}
+    \begin{tabular}{l c c}
+      \toprule[0.2 em]
+      \multicolumn{2}{l}{Baseline: DeepLab-LargeFOV} & 62.28  \\
+      \toprule[0.2 em]
+      {\bf Merging Method} & & w/ E-Supv \\
+      \midrule \midrule
+      {\it Scales = \{1, 0.5\}} & & \\
+      Max-Pooling & 64.81 & 67.43 \\
+      Average-Pooling & 64.86 & 67.79 \\
+      Attention & 65.27 & 68.24 \\
+      \midrule
+      {\it Scales = \{1, 0.75, 0.5\}} & & \\
+      Max-Pooling & 65.15 & 67.79 \\
+      Average-Pooling & 63.92 & 67.98 \\
+      Attention & 64.37 & {\bf 69.08} \\
+      \bottomrule[0.1 em]
+    \end{tabular}
+    \vspace{1pt}
+    \caption{Results on PASCAL VOC 2012 {\it validation} set, pretrained with ImageNet. E-Supv: extra supervision.}
+    \label{tab:deeplab_voc12_imagenet}
+\end{table}
+
+%\paragraph{Pretrained with ImageNet} 
+\textbf{Pretrained with ImageNet:} First, we experiment with the scenario where the underlying DeepLab-LargeFOV is only pretrained on ImageNet \cite{ILSVRC15}. Our reproduction of DeepLab-LargeFOV and DeepLab-MSc-LargeFOV yields performance of $62.28\%$ and $64.39\%$ on the validation set, respectively. They are similar to those ($62.25\%$ and $64.21\%$) reported in \cite{chen2014semantic}. We report results of the proposed methods on the validation set in \tabref{tab:deeplab_voc12_imagenet}. We observe similar experimental results as PASCAL-Person-Part dataset: (1) Using two input scales is better than single input scale. (2) Adding extra supervision is necessary to achieve better performance for merging three input scales, especially for average-pooling and the proposed attention model. (3) The best performance ($6.8\%$ improvement over the DeepLab-LargeFOV baseline) is obtained with three input scales, attention model, and extra supervision, and its performance is $4.69\%$ better than DeepLab-MSc-LargeFOV ($64.39\%$).
+
+%In addition to observe the same results as PASCAL-Person-Part dataset, using three scale inputs, attention model, and extra supervision bring significantly $6.8\%$ improvement over the baseline. 
+
+%% \begin{table*} %\scriptsize
+%% %\rowcolors{2}{}{ultramarineblue!25}
+%% \setlength{\tabcolsep}{3pt}
+%% \resizebox{2.1\columnwidth}{!}{
+%% \begin{tabular}{l||c||c*{20}{|c}}
+%% \toprule[0.2 em]
+%% Method         & mean & bkg &  aero & bike & bird & boat & bottle& bus & car  &  cat & chair& cow  &table & dog  & horse & mbike& person& plant&sheep& sofa &train & tv  \\
+%% \midrule \midrule
+%% {\it Pretrained with ImageNet} & & & & & & & & & & & & & & & & & & & & & & \\
+%% DeepLab-LargeFOV \cite{chen2014semantic} & 65.1 & 90.7 & 74.7 & 34.0 & 74.3 & 57.1 & 62.0 & 82.6 & 75.5 & 79.1 & 26.2 & 65.7 & 55.8 & 73.0 & 68.0 & 78.6 & 76.2 & 50.6 & 73.9 & 45.5 & 66.6 & 57.1  \\
+%% DeepLab-MSc-LargeFOV \cite{chen2014semantic} & 67.0 & 91.6 & 78.7 & 51.4 & 75.7 & 59.5 & 61.7 & 82.4 & 76.7 & 79.4 & 26.8 & 67.7 & 54.7 & 74.3 & 70.0 & 79.9 & 77.3 & 52.5 & 75.5 & 46.5 & 67.0 & 57.1  \\
+%% %ParseNet Baseline \cite{liu2015parsenet} & 67.3 & 92.3 & 82.6 & 36.1 & 76.1 & 59.3 & 62.3 & 81.6 & 79.5 & 81.4 & 28.1 & 70.0 & 53.0 & 73.2 & 70.6 & 78.8 & 78.6 & 51.9 & 77.4 & 45.5 & 71.7 & 62.6  \\
+%% TTI\_zoomout\_v2 \cite{mostajabi2014feedforward} & 69.6 & 91.9 & 85.6 & 37.3 & 83.2 & 62.5 & 66.0 & 85.1 & 80.7 & 84.9 & 27.2 & 73.3 & 57.5 & 78.1 & 79.2 & 81.1 & 77.1 & 53.6 & 74.0 & 49.2 & 71.7 & 63.3  \\
+%% ParseNet \cite{liu2015parsenet} &  69.8 & 92.4 & 84.1 & 37.0 & 77.0 & 62.8 & 64.0 & 85.8 & 79.7 & 83.7 & 27.7 & 74.8 & 57.6 & 77.1 & 78.3 & 81.0 & 78.2 & 52.6 & 80.4 & 49.9 & 75.7 & 65.0 \\
+%% %DeepLab-CRF-LargeFOV \cite{chen2014semantic} & 70.3 & 92.6 & 83.5 & 36.6 & 82.5 & 62.3 & 66.5 & 85.4 & 78.5 & 83.7 & 30.4 & 72.9 & 60.4 & 78.5 & 75.5 & 82.1 & 79.7 &  58.2 & 82.0 & 48.8 & 73.7 & 63.3  \\
+%% \midrule
+%% %\href{http://host.robots.ox.ac.uk:8080/anonymous/SK0HAZ.html}{DeepLab-MSc-LargeFOV-{\bf Attention}} & 70.2 & 92.5 & 82.0 & 58.9 & 77.2 & 61.3 & 66.5 & 86.5 & 80.4 & 82.2 & 28.4 & 72.8 & 57.1 & 77.1 & 73.1 & 82.5 & 78.6 & 55.1 & 80.9 & 48.8 & 71.3 & 60.9  \\
+%% \href{http://host.robots.ox.ac.uk:8080/anonymous/OBB7IY.html}{DeepLab-LargeFOV-{\bf AveragePooling}} & 70.5 & 92.7 & 83.5 & 37.2 & 75.4 & 60.9 & 69.3 & 89.0 & 83.4 & 83.5 & 28.2 & 73.4 & 58.7 & 78.4 & 79.0 & 83.0 & 79.7 & 54.4 & 79.6 & 50.2 & 
+%% 78.0 & 63.5 \\
+%% \href{http://host.robots.ox.ac.uk:8080/anonymous/1TQ8XB.html}{DeepLab-LargeFOV-{\bf MaxPooling}} & 70.6 & 92.7 & 84.1 & 37.7 & 75.7 & 62.2 & 69.2 & 89.0 & 83.6 & 84.5 & 28.0 & 73.9 & 59.5 & 79.7 & 77.3 & 82.1 & 80.0 & 53.8 & 79.9 & 50.3 & 76.3 & 62.6 \\
+%% \href{http://host.robots.ox.ac.uk:8080/anonymous/1TN3OK.html}{DeepLab-LargeFOV-{\bf Attention}} & 71.5 & 92.9 & 86.0 & 38.8 & 78.2 & 63.1 & 70.2 & 89.6 & 84.1 & 82.9 & 29.4 & 75.2 & 58.7 & 79.3 & 78.4 & 83.9 & 80.3 & 53.5 & 82.6 & 51.5 & 79.2 & 64.2  \\
+%% \midrule \midrule
+%% {\it Pretrained with MS-COCO} & & & & & & & & & & & & & & & & & & & & & & \\
+%% DeepLab-CRF-COCO-LargeFOV \cite{papandreou2015weakly} & 72.7 & 93.4 & 89.1 & 38.3 & 88.1 & 63.3 & 69.7 & 87.1 & 83.1 & 85.0 & 29.3 & 76.5 & 56.5 & 79.8 & 77.9 & 85.8 & 82.4 & 57.4 & 84.3 & 54.9 & 80.5 & 64.1  \\
+%% DeepLab-MSc-CRF-COCO-LargeFOV \cite{papandreou2015weakly} & 73.6 & 93.8 & 88.7 & 53.1 & 87.7 & 64.4 & 69.5 & 85.9 & 81.6 & 85.3 & 31.0 & 76.4 & 62.0 & 79.8 & 77.3 & 84.6 & 83.2 & 59.1 & 85.5 & 55.9 & 76.5 & 64.3  \\
+%% \midrule
+%% %\href{http://host.robots.ox.ac.uk:8080/anonymous/DZDATS.html}{DeepLab-MSc-CRF-COCO-LargeFOV-{\bf Attention}} & 74.7 & 93.8 & 89.7 & 57.1 & 86.4 & 64.5 & 69.9 & 88.0 & 82.0 & 87.1 & 30.7 & 80.9 & 64.4 & 81.3 & 82.1 & 84.5 & 83.4 & 61.2 & 86.7 & 56.8 & 74.9 & 62.9  \\
+
+%% % no data augmentation
+%% %\href{http://host.robots.ox.ac.uk:8080/anonymous/LR9XXV.html}{DeepLab-CRF-COCO-LargeFOV-{\bf Attention}} & 74.7 & 93.9 & 91.2 & 38.9 & 84.4 & 65.4 & 72.1 & 92.3 & 84.0 & 87.1 & 32.3 & 80.4 & 62.5 & 83.9 & 82.5 & 86.0 & 84.1 & 57.4 & 86.3 & 55.2 & 82.1 & 66.4  \\
+
+%% \href{http://host.robots.ox.ac.uk:8080/anonymous/F6FXXL.html}{DeepLab-CRF-COCO-LargeFOV-{\bf Attention}} & 75.1 & 94.0 & 92.0 & 41.2 & 87.8 & 57.2 & 72.7 & 92.8 & 85.9 & 90.5 & 30.5 & 78.0 & 62.8 & 85.8 & 85.3 & 87.2 & 85.6 & 57.7 & 85.1 & 56.5 & 83.0 & 65.0 \\
+
+%% \href{http://host.robots.ox.ac.uk:8080/anonymous/F6FXXL.html}{DeepLab-CRF-COCO-LargeFOV-{\bf Attention}+} & 75.7 & 94.1 & 91.1 & 40.9 & 86.9 & 62.1 & 74.2 & 92.3 & 84.4 & 90.1 & 34.0 & 81.7 & 66.0 & 83.5 & 83.9 & 86.5 & 84.6 & 59.1 & 87.2 & 59.6 & 81.0 & 66.2 \\
+%% \bottomrule[0.1 em]
+%%  \end{tabular}
+%% }
+%%  \caption{Labeling IOU on the PASCAL VOC 2012 test set, using the trainval set for training.}
+%%  \label{tab:voc2012}
+%% \end{table*}
+
+\begin{table}
+  \centering
+  \rowcolors{2}{}{yelloworange!25}
+  \addtolength{\tabcolsep}{2.5pt}
+  \begin{tabular} {l | c}
+    \toprule[0.2 em]
+    {\bf Method} & mIOU \\
+    \midrule \midrule
+    {\it Pretrained with ImageNet} & \\
+    DeepLab-LargeFOV \cite{chen2014semantic} & 65.1 \\
+    DeepLab-MSc-LargeFOV \cite{chen2014semantic} & 67.0 \\
+    TTI\_zoomout\_v2 \cite{mostajabi2014feedforward} & 69.6 \\
+    ParseNet \cite{liu2015parsenet} & 69.8 \\
+    \midrule
+    DeepLab-LargeFOV-{\bf AveragePooling} & 70.5 \\
+    DeepLab-LargeFOV-{\bf MaxPooling} & 70.6 \\
+    DeepLab-LargeFOV-{\bf Attention} & 71.5 \\
+    \midrule \midrule
+    {\it Pretrained with MS-COCO} & \\
+    DeepLab-CRF-COCO-LargeFOV \cite{papandreou2015weakly} & 72.7 \\
+    DeepLab-MSc-CRF-COCO-LargeFOV \cite{papandreou2015weakly} & 73.6 \\
+    CRF-RNN \cite{zheng2015conditional} & 74.7 \\
+    BoxSup \cite{dai2015boxsup} & 75.2 \\
+    DPN \cite{liu2015semantic} & 77.5 \\
+    Adelaide \cite{lin2015efficient} & 77.8 \\
+    \midrule
+    DeepLab-CRF-COCO-LargeFOV-{\bf Attention} & 75.1 \\
+    DeepLab-CRF-COCO-LargeFOV-{\bf Attention}+ & 75.7 \\
+    DeepLab-CRF-Attention-DT \cite{chen2015semantic} & 76.3 \\
+    \bottomrule[0.1 em]
+  \end{tabular}
+  \caption{Labeling IOU on the PASCAL VOC 2012 test set.}
+  \label{tab:voc2012}
+\end{table}
+
+We also report results on the test set for our best model in \tabref{tab:voc2012}. First, we observe that the attention model yields a $1\%$ improvement over average pooling, consistent with our results on the validation set. We then compare our models with DeepLab-LargeFOV and DeepLab-MSc-LargeFOV \cite{chen2014semantic} \footnote{test results are obtained by personal communication with authors \cite{chen2014semantic}}. We find that our proposed model improves $6.4\%$ over DeepLab-LargeFOV, and gives a $4.5\%$ boost over DeepLab-MSc\_LargeFOV. Finally, we compare our models with two other methods: ParseNet \cite{liu2015parsenet} and TTI\_zoomout\_v2 \cite{mostajabi2014feedforward}. ParseNet incorporates the image-level feature as global contextual information. We consider ParseNet as a special case to exploit multi-scale features, where the whole image is summarized by the image-level feature. TTI\_zoomout\_v2 also exploits features at different spatial scales. As shown in the table, our proposed model outperforms both of them. Note none of the methods discussed here employ a fully connected CRF \cite{KrahenbuhlK11}.
+
+\begin{table}
+  \centering
+  \rowcolors{2}{}{yelloworange!25}
+  \addtolength{\tabcolsep}{2.5pt}
+    \begin{tabular}{l c c}
+      \toprule[0.2 em]
+      \multicolumn{2}{l}{Baseline: DeepLab-LargeFOV} & 67.58  \\
+      \toprule[0.2 em]
+      {\bf Merging Method} &  & w/ E-Supv \\
+      \midrule
+      \midrule
+      {\it Scales = \{1, 0.5\}} & & \\
+      Max-Pooling & 69.15 & 70.01 \\
+      Average-Pooling & 69.22 & 70.44 \\
+      Attention & 69.90 & 70.76 \\
+      \midrule
+      {\it Scales = \{1, 0.75, 0.5\}} & & \\
+      Max-Pooling & 69.70 & 70.06 \\
+      Average-Pooling & 68.82 & 70.55 \\
+      Attention & 69.47 & {\bf 71.42} \\
+      \bottomrule[0.1 em]
+    \end{tabular}
+    \vspace{1pt}
+    \caption{Results on PASCAL VOC 2012 {\it validation} set, pretrained with MS-COCO. E-Supv: extra supervision.}
+    \label{tab:deeplab_voc12}
+\end{table}
+
+%\paragraph{Pretrained with MS-COCO} 
+\textbf{Pretrained with MS-COCO:} Second, we experiment with the scenario where the underlying baseline, DeepLab-LargeFOV, has been pretrained on the MS-COCO 2014 dataset \cite{lin2014microsoft}. The goal is to test if we can still observe any improvement with such a strong baseline. As shown in \tabref{tab:deeplab_voc12}, we again observe similar experimental results, and our best model still outperforms the DeepLab-LargeFOV baseline by $3.84\%$. We also report the
+best model on the {\it test} set in the bottom of \tabref{tab:voc2012}. For a fair comparison with the reported DeepLab variants on the test set, we employ a fully connected CRF \cite{KrahenbuhlK11} as post processing. As shown in the table, our model attains the performance of $75.1\%$, outperforming DeepLab-CRF-LargeFOV and DeepLab-MSc-CRF-LaregeFOV by $2.4\%$, and $1.5\%$, respectively. Motivated by \cite{lin2015efficient}, incorporating data augmentation by randomly scaling input images (from 0.6 to 1.4) during training brings extra $0.6\%$ improvement in our model.
+
+%% When using DeepLab-LargeFOV as baseline, the best performance is obtained with three input scales, attention model, and extra supervision. On the other hand, when DeepLab-MSc-LargeFOV is employed as baseline (\tabref{tab:deeplab_msc_voc12}), we find that using multi-scale inputs yields better performance, but introducing extra supervision does not further improve the performance. Comparing \tabref{tab:deeplab_voc12} and \tabref{tab:deeplab_msc_voc12}, using three scale inputs, attention model, and extra supervision for DeepLab-LargeFOV yields similar performance to using two scale inputs, attention model, and {\bf no} extra supervision for DeepLab-MSc-LargeFOV. We make boldface the best performance in both tables, and note that we observe $3.8\%$ improvement over the baseline in \tabref{tab:deeplab_voc12}, while only $2.5\%$ improvement in \tabref{tab:deeplab_msc_voc12}, showing that the proposed methods are more effective for DeepLab-LargeFOV. We also report the both best models on the official PASCAL VOC 2012 {\it test} set in \tabref{tab:voc2012}. For fair comparison with the reported DeepLab variants on test set, we also employ fully connected CRF \cite{KrahenbuhlK11} as post processing. As shown in the table, those two best models (with bold suffix {\bf attention}) have same performance on test set and both outperform the original DeepLab variants by $2\%$ and $1.1\%$, respectively.
+
+%% \begin{table}[!t]
+%%   \centering
+%% %  \rowcolors{2}{}{yelloworange!25}
+%%   \addtolength{\tabcolsep}{2.5pt}
+%%     \begin{tabular}{l c c}
+%%       \toprule[0.2 em]
+%%       \multicolumn{2}{l}{Baseline: DeepLab-MSc-LargeFOV} & 64.39  \\
+%%       \toprule[0.2 em]
+%%       {\bf Merging Method} & & w/ E-Supv \\
+%%       \midrule \midrule
+%%       {\it Scales = \{1, 0.5\}} & & \\
+%%       Max-Pooling & 65.40 & 65.06 \\
+%%       Average-Pooing & 65.77 & 66.44 \\
+%%       Attention & 66.77 & 66.99 \\
+%%       \midrule
+%%       {\it Scales = \{1, 0.75, 0.5\}} & & \\
+%%       Max-Pooling & 65.62 & 65.39 \\
+%%       Average-Pooling & 65.88 & 66.86 \\
+%%       Attention & 66.82 & {\bf 67.13} \\
+%%       \bottomrule[0.1 em]
+%%     \end{tabular}
+%%     \caption{Results on PASCAL VOC 2012 {\it validation} set with DeepLab-MSc-LargeFOV as baseline, pretrained with ImageNet. E-Supv: extra supervision.}
+%%     \label{tab:deeplab_voc12_imagenet}
+%% \end{table}
+
+%% \begin{table}[!t]
+%%   \centering
+%% %  \rowcolors{2}{}{yelloworange!25}
+%%   \addtolength{\tabcolsep}{2.5pt}
+%%     \begin{tabular}{l c c}
+%%       \toprule[0.2 em]
+%%       \multicolumn{2}{l}{Baseline: DeepLab-MSc-LargeFOV} & 68.90  \\
+%%       \toprule[0.2 em]
+%%       {\bf Merging Method} & & w/ E-Supv \\
+%%       \midrule
+%%       \midrule
+%%       {\it Scales = \{1, 0.5\}} & & \\
+%%       Max-Pooling & 70.26 & 69.82 \\
+%%       Average-Pooling & 70.11 & 70.61 \\
+%%       Attention & {\bf 71.38} & 71.26 \\
+%%       \midrule
+%%       {\it Scales = \{1, 0.75, 0.5\}} & & \\
+%%       Max-Pooling & 70.49 & 70.04 \\
+%%       Average-Pooling & 70.38 & 70.76 \\
+%%       Attention & 71.32 & 71.21 \\
+%%       \bottomrule[0.1 em]
+%%     \end{tabular}
+%%     \caption{Results on PASCAL VOC 2012 {\it validation} set with DeepLab-MSc-LargeFOV as baseline, pretrained with MS-COCO. E-Supv: extra supervision.}
+%%     \label{tab:deeplab_msc_voc12}
+%% \end{table}
+
+Note our models do not outperform current best models \cite{lin2015efficient, liu2015semantic}, which employ joint training of CRF (\eg, with the {\it spatial} pairwise term) and FCNs \cite{chen2014learning}. However, we believe our proposed method (\eg, attention model for scales) could be complementary to them. We emphasize that our models are trained end-to-end with one pass to exploit multi-scale features, instead of multiple training steps. Recently, \cite{chen2015semantic} has been shown that further improvement can be attained by combining our proposed model and a discriminatively trained domain transform \cite{GastalOliveira2011DomainTransform}.
+
+\begin{figure*}
+  \centering
+  \scalebox{0.95}{
+  \begin{tabular}{c c c c c c}
+   \includegraphics[height=0.1\linewidth]{fig/voc12/img/2010_004795.jpg} &
+   \includegraphics[height=0.1\linewidth]{fig/voc12/res_baseline/2010_004795.png} &
+   \includegraphics[height=0.1\linewidth]{fig/voc12/res_sharenet/2010_004795.png} &
+   \includegraphics[height=0.1\linewidth]{fig/voc12/att1/2010_004795.pdf} &
+   \includegraphics[height=0.1\linewidth]{fig/voc12/att2/2010_004795.pdf} &
+   \includegraphics[height=0.1\linewidth]{fig/voc12/att3/2010_004795.pdf} \\
+   \includegraphics[height=0.1\linewidth]{fig/voc12/img/2011_001642.jpg} &
+   \includegraphics[height=0.1\linewidth]{fig/voc12/res_baseline/2011_001642.png} &
+   \includegraphics[height=0.1\linewidth]{fig/voc12/res_sharenet/2011_001642.png} &
+   \includegraphics[height=0.1\linewidth]{fig/voc12/att1/2011_001642.pdf} &
+   \includegraphics[height=0.1\linewidth]{fig/voc12/att2/2011_001642.pdf} &
+   \includegraphics[height=0.1\linewidth]{fig/voc12/att3/2011_001642.pdf} \\
+   \includegraphics[height=0.1\linewidth]{fig/voc12/img/2011_002121.jpg} &
+   \includegraphics[height=0.1\linewidth]{fig/voc12/res_baseline/2011_002121.png} &
+   \includegraphics[height=0.1\linewidth]{fig/voc12/res_sharenet/2011_002121.png} &
+   \includegraphics[height=0.1\linewidth]{fig/voc12/att1/2011_002121.pdf} &
+   \includegraphics[height=0.1\linewidth]{fig/voc12/att2/2011_002121.pdf} &
+   \includegraphics[height=0.1\linewidth]{fig/voc12/att3/2011_002121.pdf} \\
+   %% \includegraphics[height=0.1\linewidth]{fig/voc12/img/2011_003256.jpg} &
+   %% \includegraphics[height=0.1\linewidth]{fig/voc12/res_baseline/2011_003256.png} &
+   %% \includegraphics[height=0.1\linewidth]{fig/voc12/res_sharenet/2011_003256.png} &
+   %% \includegraphics[height=0.1\linewidth]{fig/voc12/att1/2011_003256.pdf} &
+   %% \includegraphics[height=0.1\linewidth]{fig/voc12/att2/2011_003256.pdf} &
+   %% \includegraphics[height=0.1\linewidth]{fig/voc12/att3/2011_003256.pdf} \\
+   \includegraphics[height=0.1\linewidth]{fig/voc12/img/2007_008260.jpg} &
+   \includegraphics[height=0.1\linewidth]{fig/voc12/res_baseline/2007_008260.png} &
+   \includegraphics[height=0.1\linewidth]{fig/voc12/res_sharenet/2007_008260.png} &
+   \includegraphics[height=0.1\linewidth]{fig/voc12/att1/2007_008260.pdf} &
+   \includegraphics[height=0.1\linewidth]{fig/voc12/att2/2007_008260.pdf} &
+   \includegraphics[height=0.1\linewidth]{fig/voc12/att3/2007_008260.pdf} \\
+   %% \includegraphics[height=0.094\linewidth]{fig/voc12/img/2007_009084.jpg} &
+   %% \includegraphics[height=0.094\linewidth]{fig/voc12/res_baseline/2007_009084.png} &
+   %% \includegraphics[height=0.094\linewidth]{fig/voc12/res_sharenet/2007_009084.png} &
+   %% \includegraphics[height=0.094\linewidth]{fig/voc12/att1/2007_009084.pdf} &
+   %% \includegraphics[height=0.094\linewidth]{fig/voc12/att2/2007_009084.pdf} &
+   %% \includegraphics[height=0.094\linewidth]{fig/voc12/att3/2007_009084.pdf} \\
+   %% \includegraphics[height=0.086\linewidth]{fig/voc12/img/2010_001024.jpg} &
+   %% \includegraphics[height=0.086\linewidth]{fig/voc12/res_baseline/2010_001024.png} &
+   %% \includegraphics[height=0.086\linewidth]{fig/voc12/res_sharenet/2010_001024.png} &
+   %% \includegraphics[height=0.086\linewidth]{fig/voc12/att1/2010_001024.pdf} &
+   %% \includegraphics[height=0.086\linewidth]{fig/voc12/att2/2010_001024.pdf} &
+   %% \includegraphics[height=0.086\linewidth]{fig/voc12/att3/2010_001024.pdf} \\
+   %% \includegraphics[height=0.083\linewidth]{fig/voc12/img/2008_008221.jpg} &
+   %% \includegraphics[height=0.083\linewidth]{fig/voc12/res_baseline/2008_008221.png} &
+   %% \includegraphics[height=0.083\linewidth]{fig/voc12/res_sharenet/2008_008221.png} &
+   %% \includegraphics[height=0.083\linewidth]{fig/voc12/att1/2008_008221.pdf} &
+   %% \includegraphics[height=0.083\linewidth]{fig/voc12/att2/2008_008221.pdf} &
+   %% \includegraphics[height=0.083\linewidth]{fig/voc12/att3/2008_008221.pdf} \\
+   %% \includegraphics[height=0.086\linewidth]{fig/voc12/img/2007_002728.jpg} &
+   %% \includegraphics[height=0.086\linewidth]{fig/voc12/res_baseline/2007_002728.png} &
+   %% \includegraphics[height=0.086\linewidth]{fig/voc12/res_sharenet/2007_002728.png} &
+   %% \includegraphics[height=0.086\linewidth]{fig/voc12/att1/2007_002728.pdf} &
+   %% \includegraphics[height=0.086\linewidth]{fig/voc12/att2/2007_002728.pdf} &
+   %% \includegraphics[height=0.086\linewidth]{fig/voc12/att3/2007_002728.pdf} \\
+   %% \includegraphics[height=0.097\linewidth]{fig/voc12/img/2007_000323.jpg} &
+   %% \includegraphics[height=0.097\linewidth]{fig/voc12/res_baseline/2007_000323.png} &
+   %% \includegraphics[height=0.097\linewidth]{fig/voc12/res_sharenet/2007_000323.png} &
+   %% \includegraphics[height=0.097\linewidth]{fig/voc12/att1/2007_000323.pdf} &
+   %% \includegraphics[height=0.097\linewidth]{fig/voc12/att2/2007_000323.pdf} &
+   %% \includegraphics[height=0.097\linewidth]{fig/voc12/att3/2007_000323.pdf} \\
+   %% \includegraphics[height=0.093\linewidth]{fig/voc12/img/2008_007945.jpg} &
+   %% \includegraphics[height=0.093\linewidth]{fig/voc12/res_baseline/2008_007945.png} &
+   %% \includegraphics[height=0.093\linewidth]{fig/voc12/res_sharenet/2008_007945.png} &
+   %% \includegraphics[height=0.093\linewidth]{fig/voc12/att1/2008_007945.pdf} &
+   %% \includegraphics[height=0.093\linewidth]{fig/voc12/att2/2008_007945.pdf} &
+   %% \includegraphics[height=0.093\linewidth]{fig/voc12/att3/2008_007945.pdf} \\
+   {\scriptsize (a) Image} & 
+   {\scriptsize (b) Baseline} & 
+   {\scriptsize (c) Our model} & 
+   {\scriptsize (d) Scale-1 Attention} & 
+   {\scriptsize (e) Scale-0.75 Attention} &
+   {\scriptsize (f) Scale-0.5 Attention} \\
+  \end{tabular}
+  }
+  \vspace{1pt}
+  \caption{Results on PASCAL VOC 2012 {\it validation} set. DeepLab-LargeFOV with one scale input is used as baseline. Our model employs three scale inputs, attention model and extra supervision. Scale-1 attention captures small-scale dogs (dark blue label), scale-0.75 attention concentrates on middle-scale dogs and part of sofa (light green label), while scale-0.5 attention catches largest-scale dogs and sofa.} 
+  \label{fig:pascal_voc12_results}  
+\end{figure*}
+
+%% \begin{figure*}[!th]
+%%   \centering
+%%   \scalebox{0.95}{
+%%   \begin{tabular}{c c c c c c}
+%%    \includegraphics[height=0.14\linewidth]{fig/coco/img/COCO_val2014_000000003109.jpg} &
+%%    \includegraphics[height=0.14\linewidth]{fig/coco/res_baseline/COCO_val2014_000000003109.png} &
+%%    \includegraphics[height=0.14\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000003109.png} &
+%%    \includegraphics[height=0.14\linewidth]{fig/coco/att1/COCO_val2014_000000003109.pdf} &
+%%    \includegraphics[height=0.14\linewidth]{fig/coco/att2/COCO_val2014_000000003109.pdf} &
+%%    \includegraphics[height=0.14\linewidth]{fig/coco/att3/COCO_val2014_000000003109.pdf} \\
+%%    \includegraphics[height=0.095\linewidth]{fig/coco/img/COCO_val2014_000000010693.jpg} &
+%%    \includegraphics[height=0.095\linewidth]{fig/coco/res_baseline/COCO_val2014_000000010693.png} &
+%%    \includegraphics[height=0.095\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000010693.png} &
+%%    \includegraphics[height=0.095\linewidth]{fig/coco/att1/COCO_val2014_000000010693.pdf} &
+%%    \includegraphics[height=0.095\linewidth]{fig/coco/att2/COCO_val2014_000000010693.pdf} &
+%%    \includegraphics[height=0.095\linewidth]{fig/coco/att3/COCO_val2014_000000010693.pdf} \\
+%%    \includegraphics[height=0.095\linewidth]{fig/coco/img/COCO_val2014_000000001840.jpg} &
+%%    \includegraphics[height=0.095\linewidth]{fig/coco/res_baseline/COCO_val2014_000000001840.png} &
+%%    \includegraphics[height=0.095\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000001840.png} &
+%%    \includegraphics[height=0.095\linewidth]{fig/coco/att1/COCO_val2014_000000001840.pdf} &
+%%    \includegraphics[height=0.095\linewidth]{fig/coco/att2/COCO_val2014_000000001840.pdf} &
+%%    \includegraphics[height=0.095\linewidth]{fig/coco/att3/COCO_val2014_000000001840.pdf} \\
+%%    \includegraphics[height=0.095\linewidth]{fig/coco/img/COCO_val2014_000000018444.jpg} &
+%%    \includegraphics[height=0.095\linewidth]{fig/coco/res_baseline/COCO_val2014_000000018444.png} &
+%%    \includegraphics[height=0.095\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000018444.png} &
+%%    \includegraphics[height=0.095\linewidth]{fig/coco/att1/COCO_val2014_000000018444.pdf} &
+%%    \includegraphics[height=0.095\linewidth]{fig/coco/att2/COCO_val2014_000000018444.pdf} &
+%%    \includegraphics[height=0.095\linewidth]{fig/coco/att3/COCO_val2014_000000018444.pdf} \\
+%%    \includegraphics[height=0.115\linewidth]{fig/coco/img/COCO_val2014_000000006847.jpg} &
+%%    \includegraphics[height=0.115\linewidth]{fig/coco/res_baseline/COCO_val2014_000000006847.png} &
+%%    \includegraphics[height=0.115\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000006847.png} &
+%%    \includegraphics[height=0.115\linewidth]{fig/coco/att1/COCO_val2014_000000006847.pdf} &
+%%    \includegraphics[height=0.115\linewidth]{fig/coco/att2/COCO_val2014_000000006847.pdf} &
+%%    \includegraphics[height=0.115\linewidth]{fig/coco/att3/COCO_val2014_000000006847.pdf} \\ 
+%%    %% \includegraphics[height=0.103\linewidth]{fig/coco/img/COCO_val2014_000000000328.jpg} &
+%%    %% \includegraphics[height=0.103\linewidth]{fig/coco/res_baseline/COCO_val2014_000000000328.png} &
+%%    %% \includegraphics[height=0.103\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000000328.png} &
+%%    %% \includegraphics[height=0.103\linewidth]{fig/coco/att1/COCO_val2014_000000000328.pdf} &
+%%    %% \includegraphics[height=0.103\linewidth]{fig/coco/att2/COCO_val2014_000000000328.pdf} &
+%%    %% \includegraphics[height=0.103\linewidth]{fig/coco/att3/COCO_val2014_000000000328.pdf} \\
+%%    %% \includegraphics[height=0.09\linewidth]{fig/coco/img/COCO_val2014_000000001164.jpg} &
+%%    %% \includegraphics[height=0.09\linewidth]{fig/coco/res_baseline/COCO_val2014_000000001164.png} &
+%%    %% \includegraphics[height=0.09\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000001164.png} &
+%%    %% \includegraphics[height=0.088\linewidth]{fig/coco/att1/COCO_val2014_000000001164.pdf} &
+%%    %% \includegraphics[height=0.09\linewidth]{fig/coco/att2/COCO_val2014_000000001164.pdf} &
+%%    %% \includegraphics[height=0.09\linewidth]{fig/coco/att3/COCO_val2014_000000001164.pdf} \\
+%%    %% \includegraphics[height=0.092\linewidth]{fig/coco/img/COCO_val2014_000000001869.jpg} &
+%%    %% \includegraphics[height=0.092\linewidth]{fig/coco/res_baseline/COCO_val2014_000000001869.png} &
+%%    %% \includegraphics[height=0.092\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000001869.png} &
+%%    %% \includegraphics[height=0.092\linewidth]{fig/coco/att1/COCO_val2014_000000001869.pdf} &
+%%    %% \includegraphics[height=0.092\linewidth]{fig/coco/att2/COCO_val2014_000000001869.pdf} &
+%%    %% \includegraphics[height=0.092\linewidth]{fig/coco/att3/COCO_val2014_000000001869.pdf} \\  
+%%    %% \includegraphics[height=0.093\linewidth]{fig/coco/img/COCO_val2014_000000001840.jpg} &
+%%    %% \includegraphics[height=0.093\linewidth]{fig/coco/res_baseline/COCO_val2014_000000001840.png} &
+%%    %% \includegraphics[height=0.093\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000001840.png} &
+%%    %% \includegraphics[height=0.093\linewidth]{fig/coco/att1/COCO_val2014_000000001840.pdf} &
+%%    %% \includegraphics[height=0.093\linewidth]{fig/coco/att2/COCO_val2014_000000001840.pdf} &
+%%    %% \includegraphics[height=0.093\linewidth]{fig/coco/att3/COCO_val2014_000000001840.pdf} \\
+%%    %% \includegraphics[height=0.10\linewidth]{fig/coco/img/COCO_val2014_000000000395.jpg} &
+%%    %% \includegraphics[height=0.10\linewidth]{fig/coco/res_baseline/COCO_val2014_000000000395.png} &
+%%    %% \includegraphics[height=0.10\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000000395.png} &
+%%    %% \includegraphics[height=0.10\linewidth]{fig/coco/att1/COCO_val2014_000000000395.pdf} &
+%%    %% \includegraphics[height=0.10\linewidth]{fig/coco/att2/COCO_val2014_000000000395.pdf} &
+%%    %% \includegraphics[height=0.10\linewidth]{fig/coco/att3/COCO_val2014_000000000395.pdf} \\
+%%    {\scriptsize (a) Image} & 
+%%    {\scriptsize (b) Baseline} & 
+%%    {\scriptsize (c) Our model} & 
+%%    {\scriptsize (d) Scale-1 Attention} & 
+%%    {\scriptsize (e) Scale-0.75 Attention} &
+%%    {\scriptsize (f) Scale-0.5 Attention} \\
+%%   \end{tabular}
+%%   }
+%%   \caption{Results on subset of MS-COCO 2014 {\it validation} set. DeepLab-LargeFOV with one scale input is used as baseline. Our model employs three scale inputs, attention model and extra supervision. Scale-1 attention catpures small-scale person (dark red label) and umbrella (violet label). Scale-0.75 attention concentrates on middle-scale umbrella and head, while scale-0.5 attention catches large-scale person torso.}
+%%   \label{fig:pascal_coco_results}  
+%% \end{figure*}
+
+\subsection{Subset of MS-COCO}
+%\paragraph{Dataset} 
+\textbf{Dataset:} The MS-COCO 2014 dataset \cite{lin2014microsoft} contains 80 foreground object classes and one background class. The training set has about 80K images, and 40K images for validation. We randomly select 10K images from the training set and 1,500 images from the validation set (the resulting training and validation sets have same sizes as those we used for PASCAL VOC 2012). The goal is to demonstrate our model on another challenging dataset.
+
+\begin{table}
+  \centering
+  \rowcolors{2}{}{yelloworange!25}
+  \addtolength{\tabcolsep}{2.5pt}
+    \begin{tabular}{l c c}
+      \toprule[0.2 em]
+      \multicolumn{2}{l}{Baseline: DeepLab-LargeFOV} & 31.22 \\
+      \toprule[0.2 em]
+      {\bf Merging Method} & & w/ E-Supv \\
+      \midrule \midrule
+      {\it Scales = \{1, 0.5\}} & & \\
+      Max-Pooling & 32.95 & 34.70 \\
+      Average-Pooling & 33.69 & 35.14 \\
+      Attention & 34.03 & 35.41 \\
+      \midrule
+      {\it Scales = \{1, 0.75, 0.5\}} & & \\
+      Max-Pooling & 33.58 & 35.08 \\
+      Average-Pooling & 33.74 & 35.72 \\
+      Attention & 33.42 & {\bf 35.78} \\
+      \bottomrule[0.1 em]
+    \end{tabular}
+    \vspace{1pt}
+    \caption{Results on the subset of MS-COCO {\it validation} set with DeepLab-LargeFOV as the baseline. E-Supv: extra supervision.}
+    \label{tab:deeplab_coco}
+\end{table}
+
+%\paragraph{Improve DeepLab} 
+\textbf{Improvement over DeepLab:} In addition to observing similar results as before, we find that the DeepLab-LargeFOV baseline achieves a low mean IOU $31.22 \%$ in \tabref{tab:deeplab_coco} due to the difficulty of MS-COCO dataset (\eg, large object scale variance and more object classes). However, employing multi-scale inputs, attention model, and extra supervision can still bring $4.6\%$ improvement over the DeepLab-LargeFOV baseline, and $4.17\%$ over DeepLab-MSc-LargeFOV ($31.61\%$). We find that the results of employing average-pooling and the attention model as merging methods are very similar. We hypothesize that many small object classes (\eg, fork, mouse, and toothbrush) with extremely low prediction accuracy reduce the improvement. This challenging problem (\ie, segment small objects and handle imbalanced classes) is considered as future work. On the other hand, we show the performance for the {\it person} class in \tabref{tab:deeplab_coco_person} because it occurs most frequently and appears with different scales (see Fig. 5(a), and Fig. 13(b) in \cite{lin2014microsoft}) in this dataset. As shown in the table, the improvement from the proposed methods becomes more noticeable in this case, and we observe the same results as before. We leave the qualitative results in the supplementary material.
+
+%% In \tabref{tab:deeplab_msc_coco}, the baseline, DeepLab-MSc-LargeFOV, improves only marginally (about $0.4\%$) over DeepLab-LargeFOV baseline. We observe that employing multi-scale inputs is more effective in this case than introducing extra supervision, which only improves the results slightly for average-pooling and attention model with three scale inputs. Comparing \tabref{tab:deeplab_coco} and \tabref{tab:deeplab_msc_coco}, we again find that using DeepLab-LargeFOV as baseline can attain better performance than using DeepLab-MSc-LargeFOV as baseline. However, for MS-COCO dataset, the performance of employing ``Average-Pooling'' vs. ``Attention Model'' is very similar. We find that there are many small object classes (\eg, fork, mouse, and toothbrush) with extremely low prediciton accuracy, which dilates the improvment. This challenging problem (\ie, segment small obects and handle imbalanced classes) is considered as future work. On the other hand, we here try to dig into the performance for some class. Specifically, in \tabref{tab:deeplab_coco_person} and \tabref{tab:deeplab_msc_coco_person}, we show the performance for the person class, which occurs most frequently and appears with different scales (see Fig. 5(a), and Fig. 13(b) in \cite{lin2014microsoft}) in the dataset. The improvement gained from the proposed methods becomes more noticeable in this case. In short, the results are similar to what we have observed for PASCAL-Person-Part and PASCAL VOC 2012, where (1) multi-scale inputs are helpful, (2) proposed attention model brings the best performance (and better interpretable saliance maps), (3) introducing extra supervision can further improve the performance, and (4) our proposed methods are most effective when employ DeepLab-LargeFOV as baseline.
+
+\begin{table}
+  \centering
+  \rowcolors{2}{}{yelloworange!25}
+  \addtolength{\tabcolsep}{2.5pt}
+    \begin{tabular}{l c c}
+      \toprule[0.2 em]
+      \multicolumn{2}{l}{Baseline: DeepLab-LargeFOV} & 68.76 \\
+      \toprule[0.2 em]
+      {\bf Merging Method} & & w/ E-Supv \\
+      \midrule \midrule
+      {\it Scales = \{1, 0.5\}} & & \\
+      Max-Pooling & 70.07 & 71.06 \\
+      Average-Pooling & 70.38 & 71.60 \\
+      Attention & 70.66 & 72.20 \\
+      \midrule
+      {\it Scales = \{1, 0.75, 0.5\}} & & \\
+      Max-Pooling & 69.97 & 71.43 \\
+      Average-Pooling & 69.69 & 71.70 \\
+      Attention & 70.14 & {\bf 72.72} \\
+      \bottomrule[0.1 em]
+    \end{tabular}
+    \vspace{1pt}
+    \caption{{\bf Person} class IOU on subset of MS-COCO {\it validation} set with DeepLab-LargeFOV as baseline. E-Supv: extra supervision.}
+    \label{tab:deeplab_coco_person}
+    \vspace{-16pt}
+\end{table}
+
+%% \paragraph{Improve baselines} We also observe similar results as those on PASCAL-Person-Part datset. In \tabref{tab:deeplab_coco}, the baseline, DeepLab-LargeFOV, achieves a low mean IOU $31.22 \%$ due to the difficulty of MS-COCO dataset (\eg, large object scale variance and more object classes). However, employing multi-scale inputs, attention model, and extra supervision can brings $4.6\%$ improvement over the baseline. In \tabref{tab:deeplab_msc_coco}, the baseline, DeepLab-MSc-LargeFOV, improves only marginally (about $0.4\%$) over DeepLab-LargeFOV baseline. We observe that employing multi-scale inputs is most effective in this case, while introducing extra supervision only improves the results slightly for average-pooling and attention model (it even drops for max-pooling scheme). Comparing \tabref{tab:deeplab_coco} and \tabref{tab:deeplab_msc_coco}, we again find that using DeepLab-LargeFOV as baseline can attain better performance than using DeepLab-MSc-LargeFOV as baseline. For MS-COCO dataset, we find that there are many small object classes (\eg, fork, mouse, and toothbrush) with extremely low prediciton accuracy. We consider this challenging problem (\ie, segment small obects and handle imbalanced classes) as future work.
+
+%% \section{Discussion}
+%% When comparing the performance on three datasets, we find that our proposed methods are more effective for DeepLab-LargeFOV over DeepLab-MSc-LargeFOV. As a result, we do not claim that share-net is better than skip-net, but instead we think that under the same settings it is easier to train DeepLab-LargeFOV to achieve better performance than training DeepLab-MSc-LargeFOV. 

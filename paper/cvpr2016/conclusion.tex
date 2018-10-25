@@ -1,0 +1,13 @@
+%!TEX root = top.tex
+\section{Conclusion}
+For semantic segmentation, this paper adapts a state-of-the-art model (\ie, DeepLab-LargeFOV) to exploit multi-scale inputs. Experiments on three datasets have shown that: (1) Using multi-scale inputs yields better performance than a single scale input. (2) Merging the multi-scale features with the proposed attention model not only improves the performance over average- or max-pooling baselines, but also allows us to diagnostically visualize the importance of features at different positions and scales. (3) Excellent performance can be obtained by adding extra supervision to the final output of networks for each scale. %(4) Employing proposed methods to DeepLab-LargeFOV outperforms its {\it skip-net} variant (\ie, DeepLab-MSc-LargeFOV).
+
+
+
+%% For semantic segmentation, this paper has explored two specific examples of share-net and skip-net, namely DeepLab-MSc-LargeFOV and DeepLab-LargeFOV with multi-scale inputs. Experiments on three datasets have shown that: (1) Using multi-scale inputs yields better performance than single scale input. (2) Merging the multi-scale features with the proposed attention model not only improves the performance (over average-pooling or max-pooling) but also produces better interpretable salience maps for different scales. (3) Better performance can be obtained by introducing extra supervision to the network for each scale. (4) Employing proposed methods to DeepLab-LargeFOV avoids the two-step training of DeepLab-MSc-LargeFOV and achieves better performance.
+
+%%%%%%%%
+
+\vspace{-10pt}
+\paragraph{Acknowledgments} 
+This work wast partly supported by ARO 62250-CS and NIH Grant 5R01EY022247-03. We thank Xiao-Chen Lian for valuable discussions. We also thank Sam Hallman and Haonan Yu for the proofreading.

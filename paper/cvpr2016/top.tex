@@ -1,0 +1,142 @@
+\documentclass[10pt,twocolumn,letterpaper]{article}
+
+\usepackage{cvpr}
+\usepackage{times}
+\usepackage{epsfig}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+
+\usepackage{booktabs}
+\usepackage[table]{xcolor}
+
+% Include other packages here, before hyperref.
+
+% If you comment hyperref and then uncomment it, you should delete
+% egpaper.aux before re-running latex.  (Or just hit 'q' on the first latex
+% run, let it finish, and you should be clear).
+\usepackage[pagebackref=false,breaklinks=true,letterpaper=true,colorlinks,bookmarks=false]{hyperref}
+
+\cvprfinalcopy % *** Uncomment this line for the final submission
+
+\def\cvprPaperID{2195} % *** Enter the CVPR Paper ID here
+\def\httilde{\mbox{\tt\raisebox{-.5ex}{\symbol{126}}}}
+
+% Pages are numbered in submission mode, and unnumbered in camera-ready
+\ifcvprfinal\pagestyle{empty}\fi
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%
+\definecolor{yelloworange}{RGB}{255, 153, 0}
+\definecolor{ultramarineblue}{RGB}{65, 102, 245}
+
+\newcommand{\C}{{\cal C}}
+\newcommand{\D}{{\cal D}}
+\newcommand{\Y}{{\cal Y}}
+\newcommand{\X}{{\cal X}}
+\newcommand{\R}{{\cal R}}
+\renewcommand{\H}{{\cal H}}
+\renewcommand{\S}{{\cal S}}
+\newcommand{\bm}[1]{\boldsymbol{#1}}
+\newcommand{\argmax}{\ensuremath{\mathop{\mathrm{argmax}}}}
+
+\newcommand{\thetav}{\ensuremath{\bm{\theta}}}
+
+\newcommand{\specialcell}[2][c]{\begin{tabular}[#1]{@{}c@{}}#2\end{tabular}}
+
+\def\be {\begin{equation}}
+\def\ee {\end{equation}}
+\def\beas {\begin{eqnarray*}}
+\def\eeas {\end{eqnarray*}}
+\def\bea {\begin{eqnarray}}
+\def\eea {\end{eqnarray}}
+\def\bes {\begin{equation*}}
+\def\ees {\end{equation*}}
+\def\ba {\begin{align}}
+\def\ea {\end{align}}
+\def\barr {\begin{array}}
+\def\earr {\end{array}}
+
+\def\tran {\top}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Prop}
+\newtheorem{lemma}{Lemma}
+\newtheorem{lemma-ap}{Lemma}
+\newtheorem{definition}{Definition}
+\newtheorem{corollary}{Corollary}
+\newtheorem{claim}{Claim}
+\newtheorem{claim-ap}{Claim}
+\newtheorem{program}{Program}
+\newtheorem{property}{Property}
+
+\makeatletter
+
+\usepackage{xspace}
+\def\@onedot{\ifx\@let@token.\else.\null\fi\xspace}
+\DeclareRobustCommand\onedot{\futurelet\@let@token\@onedot}
+
+\newcommand{\figref}[1]{Fig\onedot~\ref{#1}}
+\newcommand{\equref}[1]{Eq\onedot~\eqref{#1}}
+\newcommand{\secref}[1]{Sec\onedot~\ref{#1}}
+\newcommand{\tabref}[1]{Tab\onedot~\ref{#1}}
+\newcommand{\thmref}[1]{Theorem~\ref{#1}}
+\newcommand{\prgref}[1]{Program~\ref{#1}}
+%\newcommand{\algref}[1]{Alg\onedot~\ref{#1}}
+\newcommand{\clmref}[1]{Claim~\ref{#1}}
+\newcommand{\lemref}[1]{Lemma~\ref{#1}}
+\newcommand{\ptyref}[1]{Property\onedot~\ref{#1}}
+
+\newcommand{\fix}{\marginpar{FIX}}
+\newcommand{\new}{\marginpar{NEW}}
+
+\newcommand{\by}[2]{\ensuremath{#1 \! \times \! #2}}
+
+\def\eg{\emph{e.g}\onedot} \def\Eg{\emph{E.g}\onedot}
+\def\ie{\emph{i.e}\onedot} \def\Ie{\emph{I.e}\onedot}
+\def\cf{\emph{cf}\onedot} \def\Cf{\emph{Cf}\onedot}
+\def\etc{\emph{etc}\onedot} \def\vs{\emph{vs}\onedot}
+\def\wrt{w.r.t\onedot} \def\dof{d.o.f\onedot}
+\def\etal{\emph{et al}\onedot}
+
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}
+
+%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+\begin{document}
+
+%%%%%%%%% TITLE
+\title{Attention to Scale: Scale-aware Semantic Image Segmentation}
+
+\author{
+\begin{tabular}[t]{c c c}
+Liang-Chieh Chen\footnotemark & Yi Yang, Jiang Wang, Wei Xu & Alan L. Yuille \\
+lcchen@cs.ucla.edu & \{yangyi05, wangjiang03, wei.xu\}@baidu.com  & yuille@stat.ucla.edu \\
+& & alan.yuille@jhu.edu \\
+\end{tabular}
+}
+
+\maketitle
+\thispagestyle{empty}
+
+\footnotetext{$^*$Work done in part during an internship at Baidu USA.}
+
+\input{abstract}
+\input{intro}
+\input{related}
+\input{approach}
+\input{results}
+\input{conclusion}
+
+{\small
+\bibliographystyle{ieee}
+\bibliography{egbib}
+}
+
+\end{document}

@@ -1,0 +1,16 @@
+train_net: "voc10_part/config/deconv_ms8/train_train.prototxt"
+
+lr_policy: "step"
+gamma: 0.1
+stepsize: 50000
+base_lr: 0.00001
+
+average_loss: 100
+display: 100
+max_iter: 100000
+momentum: 0.99
+weight_decay: 0
+
+snapshot: 50000
+snapshot_prefix: "voc10_part/model/deconv_ms8/train"
+solver_mode: GPU

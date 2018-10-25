@@ -1,0 +1,2 @@
+Training net voc12/vgg128_noup_pool3_20M_largewin_multipath
+Running ../code_baidu/.build_release/tools/caffe.bin train --solver=voc12/config/vgg128_noup_pool3_20M_largewin_multipath/solver_train_aug.prototxt --gpu=1 --weights=voc12/model/vgg128_noup_pool3_20M_largewin_multipath/init.caffemodel

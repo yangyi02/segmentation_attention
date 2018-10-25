@@ -1,0 +1,1144 @@
+\documentclass[10pt,twocolumn,letterpaper]{article}
+
+\usepackage{cvpr}
+\usepackage{times}
+\usepackage{epsfig}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+
+\usepackage{booktabs}
+\usepackage[table]{xcolor}
+
+\definecolor{yelloworange}{RGB}{255, 153, 0}
+
+% Include other packages here, before hyperref.
+
+% If you comment hyperref and then uncomment it, you should delete
+% egpaper.aux before re-running latex.  (Or just hit 'q' on the first latex
+% run, let it finish, and you should be clear).
+\usepackage[pagebackref=true,breaklinks=true,letterpaper=true,colorlinks,bookmarks=false]{hyperref}
+
+\cvprfinalcopy % *** Uncomment this line for the final submission
+
+\def\cvprPaperID{2195} % *** Enter the CVPR Paper ID here
+\def\httilde{\mbox{\tt\raisebox{-.5ex}{\symbol{126}}}}
+
+% Pages are numbered in submission mode, and unnumbered in camera-ready
+\ifcvprfinal\pagestyle{empty}\fi
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\C}{{\cal C}}
+\newcommand{\D}{{\cal D}}
+\newcommand{\Y}{{\cal Y}}
+\newcommand{\X}{{\cal X}}
+\newcommand{\R}{{\cal R}}
+\renewcommand{\H}{{\cal H}}
+\renewcommand{\S}{{\cal S}}
+\newcommand{\bm}[1]{\boldsymbol{#1}}
+\newcommand{\argmax}{\ensuremath{\mathop{\mathrm{argmax}}}}
+
+\newcommand{\thetav}{\ensuremath{\bm{\theta}}}
+
+\newcommand{\specialcell}[2][c]{\begin{tabular}[#1]{@{}c@{}}#2\end{tabular}}
+
+\def\be {\begin{equation}}
+\def\ee {\end{equation}}
+\def\beas {\begin{eqnarray*}}
+\def\eeas {\end{eqnarray*}}
+\def\bea {\begin{eqnarray}}
+\def\eea {\end{eqnarray}}
+\def\bes {\begin{equation*}}
+\def\ees {\end{equation*}}
+\def\ba {\begin{align}}
+\def\ea {\end{align}}
+\def\barr {\begin{array}}
+\def\earr {\end{array}}
+
+\def\tran {\top}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Prop}
+\newtheorem{lemma}{Lemma}
+\newtheorem{lemma-ap}{Lemma}
+\newtheorem{definition}{Definition}
+\newtheorem{corollary}{Corollary}
+\newtheorem{claim}{Claim}
+\newtheorem{claim-ap}{Claim}
+\newtheorem{program}{Program}
+\newtheorem{property}{Property}
+
+\makeatletter
+
+\usepackage{xspace}
+\def\@onedot{\ifx\@let@token.\else.\null\fi\xspace}
+\DeclareRobustCommand\onedot{\futurelet\@let@token\@onedot}
+
+\newcommand{\figref}[1]{Fig\onedot~\ref{#1}}
+\newcommand{\equref}[1]{Eq\onedot~\eqref{#1}}
+\newcommand{\secref}[1]{Sec\onedot~\ref{#1}}
+\newcommand{\tabref}[1]{Tab\onedot~\ref{#1}}
+\newcommand{\thmref}[1]{Theorem~\ref{#1}}
+\newcommand{\prgref}[1]{Program~\ref{#1}}
+%\newcommand{\algref}[1]{Alg\onedot~\ref{#1}}
+\newcommand{\clmref}[1]{Claim~\ref{#1}}
+\newcommand{\lemref}[1]{Lemma~\ref{#1}}
+\newcommand{\ptyref}[1]{Property\onedot~\ref{#1}}
+
+\newcommand{\fix}{\marginpar{FIX}}
+\newcommand{\new}{\marginpar{NEW}}
+
+\newcommand{\by}[2]{\ensuremath{#1 \! \times \! #2}}
+
+\def\eg{\emph{e.g}\onedot} \def\Eg{\emph{E.g}\onedot}
+\def\ie{\emph{i.e}\onedot} \def\Ie{\emph{I.e}\onedot}
+\def\cf{\emph{cf}\onedot} \def\Cf{\emph{Cf}\onedot}
+\def\etc{\emph{etc}\onedot} \def\vs{\emph{vs}\onedot}
+\def\wrt{w.r.t\onedot} \def\dof{d.o.f\onedot}
+\def\etal{\emph{et al}\onedot}
+
+
+%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+\begin{document}
+
+%%%%%%%%% TITLE
+\title{Attention to Scale: Scale-aware Semantic Segmentation \\
+--\ supplementary material\ --}
+
+\author{
+\begin{tabular}[t]{c c c}
+Liang-Chieh Chen & Yi Yang, Jiang Wang, Wei Xu & Alan L. Yuille \\
+lcchen@cs.ucla.edu & \{yangyi05, wangjiang03, wei.xu\}@baidu.com  & yuille@stat.ucla.edu \\
+& & alan.yuille@jhu.edu \\
+\end{tabular}
+}
+
+\maketitle
+
+\begin{abstract}
+The supplementary material contains: (1) more qualitative results on some videos from MPII Human Pose dataset. (2) few more experimental result on subset of MS-COCO 2014 dataset, (3) more qualitative results on PASCAL-Person-Part, PASCAL VOC 2012, and subset of MS-COCO 2014 datasets. 
+
+\end{abstract}
+
+\begin{figure*}[!h]
+  \centering
+  \scalebox{0.95}{
+  \begin{tabular}{c c c c c c}
+   \includegraphics[height=0.14\linewidth]{fig/coco/img/COCO_val2014_000000003109.jpg} &
+   \includegraphics[height=0.14\linewidth]{fig/coco/res_baseline/COCO_val2014_000000003109.png} &
+   \includegraphics[height=0.14\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000003109.png} &
+   \includegraphics[height=0.14\linewidth]{fig/coco/att1/COCO_val2014_000000003109.pdf} &
+   \includegraphics[height=0.14\linewidth]{fig/coco/att2/COCO_val2014_000000003109.pdf} &
+   \includegraphics[height=0.14\linewidth]{fig/coco/att3/COCO_val2014_000000003109.pdf} \\
+   \includegraphics[height=0.095\linewidth]{fig/coco/img/COCO_val2014_000000010693.jpg} &
+   \includegraphics[height=0.095\linewidth]{fig/coco/res_baseline/COCO_val2014_000000010693.png} &
+   \includegraphics[height=0.095\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000010693.png} &
+   \includegraphics[height=0.095\linewidth]{fig/coco/att1/COCO_val2014_000000010693.pdf} &
+   \includegraphics[height=0.095\linewidth]{fig/coco/att2/COCO_val2014_000000010693.pdf} &
+   \includegraphics[height=0.095\linewidth]{fig/coco/att3/COCO_val2014_000000010693.pdf} \\
+   \includegraphics[height=0.095\linewidth]{fig/coco/img/COCO_val2014_000000001840.jpg} &
+   \includegraphics[height=0.095\linewidth]{fig/coco/res_baseline/COCO_val2014_000000001840.png} &
+   \includegraphics[height=0.095\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000001840.png} &
+   \includegraphics[height=0.095\linewidth]{fig/coco/att1/COCO_val2014_000000001840.pdf} &
+   \includegraphics[height=0.095\linewidth]{fig/coco/att2/COCO_val2014_000000001840.pdf} &
+   \includegraphics[height=0.095\linewidth]{fig/coco/att3/COCO_val2014_000000001840.pdf} \\
+   \includegraphics[height=0.095\linewidth]{fig/coco/img/COCO_val2014_000000018444.jpg} &
+   \includegraphics[height=0.095\linewidth]{fig/coco/res_baseline/COCO_val2014_000000018444.png} &
+   \includegraphics[height=0.095\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000018444.png} &
+   \includegraphics[height=0.095\linewidth]{fig/coco/att1/COCO_val2014_000000018444.pdf} &
+   \includegraphics[height=0.095\linewidth]{fig/coco/att2/COCO_val2014_000000018444.pdf} &
+   \includegraphics[height=0.095\linewidth]{fig/coco/att3/COCO_val2014_000000018444.pdf} \\
+   \includegraphics[height=0.115\linewidth]{fig/coco/img/COCO_val2014_000000006847.jpg} &
+   \includegraphics[height=0.115\linewidth]{fig/coco/res_baseline/COCO_val2014_000000006847.png} &
+   \includegraphics[height=0.115\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000006847.png} &
+   \includegraphics[height=0.115\linewidth]{fig/coco/att1/COCO_val2014_000000006847.pdf} &
+   \includegraphics[height=0.115\linewidth]{fig/coco/att2/COCO_val2014_000000006847.pdf} &
+   \includegraphics[height=0.115\linewidth]{fig/coco/att3/COCO_val2014_000000006847.pdf} \\ 
+   %% \includegraphics[height=0.103\linewidth]{fig/coco/img/COCO_val2014_000000000328.jpg} &
+   %% \includegraphics[height=0.103\linewidth]{fig/coco/res_baseline/COCO_val2014_000000000328.png} &
+   %% \includegraphics[height=0.103\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000000328.png} &
+   %% \includegraphics[height=0.103\linewidth]{fig/coco/att1/COCO_val2014_000000000328.pdf} &
+   %% \includegraphics[height=0.103\linewidth]{fig/coco/att2/COCO_val2014_000000000328.pdf} &
+   %% \includegraphics[height=0.103\linewidth]{fig/coco/att3/COCO_val2014_000000000328.pdf} \\
+   %% \includegraphics[height=0.09\linewidth]{fig/coco/img/COCO_val2014_000000001164.jpg} &
+   %% \includegraphics[height=0.09\linewidth]{fig/coco/res_baseline/COCO_val2014_000000001164.png} &
+   %% \includegraphics[height=0.09\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000001164.png} &
+   %% \includegraphics[height=0.088\linewidth]{fig/coco/att1/COCO_val2014_000000001164.pdf} &
+   %% \includegraphics[height=0.09\linewidth]{fig/coco/att2/COCO_val2014_000000001164.pdf} &
+   %% \includegraphics[height=0.09\linewidth]{fig/coco/att3/COCO_val2014_000000001164.pdf} \\
+   %% \includegraphics[height=0.092\linewidth]{fig/coco/img/COCO_val2014_000000001869.jpg} &
+   %% \includegraphics[height=0.092\linewidth]{fig/coco/res_baseline/COCO_val2014_000000001869.png} &
+   %% \includegraphics[height=0.092\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000001869.png} &
+   %% \includegraphics[height=0.092\linewidth]{fig/coco/att1/COCO_val2014_000000001869.pdf} &
+   %% \includegraphics[height=0.092\linewidth]{fig/coco/att2/COCO_val2014_000000001869.pdf} &
+   %% \includegraphics[height=0.092\linewidth]{fig/coco/att3/COCO_val2014_000000001869.pdf} \\  
+   %% \includegraphics[height=0.093\linewidth]{fig/coco/img/COCO_val2014_000000001840.jpg} &
+   %% \includegraphics[height=0.093\linewidth]{fig/coco/res_baseline/COCO_val2014_000000001840.png} &
+   %% \includegraphics[height=0.093\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000001840.png} &
+   %% \includegraphics[height=0.093\linewidth]{fig/coco/att1/COCO_val2014_000000001840.pdf} &
+   %% \includegraphics[height=0.093\linewidth]{fig/coco/att2/COCO_val2014_000000001840.pdf} &
+   %% \includegraphics[height=0.093\linewidth]{fig/coco/att3/COCO_val2014_000000001840.pdf} \\
+   %% \includegraphics[height=0.10\linewidth]{fig/coco/img/COCO_val2014_000000000395.jpg} &
+   %% \includegraphics[height=0.10\linewidth]{fig/coco/res_baseline/COCO_val2014_000000000395.png} &
+   %% \includegraphics[height=0.10\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000000395.png} &
+   %% \includegraphics[height=0.10\linewidth]{fig/coco/att1/COCO_val2014_000000000395.pdf} &
+   %% \includegraphics[height=0.10\linewidth]{fig/coco/att2/COCO_val2014_000000000395.pdf} &
+   %% \includegraphics[height=0.10\linewidth]{fig/coco/att3/COCO_val2014_000000000395.pdf} \\
+   {\scriptsize (a) Image} & 
+   {\scriptsize (b) Baseline} & 
+   {\scriptsize (c) Our model} & 
+   {\scriptsize (d) Scale-1 Attention} & 
+   {\scriptsize (e) Scale-0.75 Attention} &
+   {\scriptsize (f) Scale-0.5 Attention} \\
+  \end{tabular}
+  }
+  \caption{Results on subset of MS-COCO 2014 {\it validation} set. DeepLab-LargeFOV with one scale input is used as baseline. Our model employs three scale inputs, attention model and extra supervision. Scale-1 attention captures small-scale person (dark red label) and umbrella (violet label). Scale-0.75 attention concentrates on middle-scale umbrella and head, while scale-0.5 attention catches large-scale person torso.}
+  \label{fig:pascal_coco_results}  
+\end{figure*}
+
+\section{Test on unseen dataset}
+We apply our trained model (\ie, has been trained with PASCAL-Part dataset) to some videos from MPII Human Pose dataset \cite{andriluka14cvpr}. The model is not fine-tuned on the dataset and the result is run frame-by-frame. In the videos, for each frame we show in the first row: (1) input image frames, (2) part segmentation results and (3) results overlapped with images. In the second row, we show (4) attention for scale = 1, (5) attention for scale = 0.75, and (6) attention for scale = 0.5. As shown in the video, even for images not seen during training (\ie, cross domain), our model is able to produce reasonably and visually good part segmentation results and it also infers meaningful attention for different scales. The video is available at \url{http://liangchiehchen.com/video/mpii.avi}.
+
+
+\section{Results on subset of MS-COCO}
+Due to the limited space in the main paper, we report in this supplementary material the qualitative results of our proposed methods on a subset of MS-COCO 2014 dataset \cite{lin2014microsoft} in \figref{fig:pascal_coco_results}.
+
+%% \paragraph{Dataset} The MS-COCO 2014 dataset \cite{lin2014microsoft} contains 80 foreground object classes and one background class. The training set has about 80K images, and 40K images for validation. We randomly select 10K images from the training set and 1,500 images from the validation set (the resulting training and validation sets have same sizes as those we used for PASCAL VOC 2012). The goal is to demonstrate our model on another challenging dataset.
+
+
+%% \begin{table}[!t]
+%%   \centering
+%% %  \rowcolors{2}{}{yelloworange!35}
+%%   \addtolength{\tabcolsep}{2.5pt}
+%%     \begin{tabular}{l c c}
+%%       \toprule[0.2 em]
+%%       \multicolumn{2}{l}{Baseline: DeepLab-LargeFOV} & 31.22 \\
+%%       \toprule[0.2 em]
+%%       {\bf Merging Method} & & w/ E-Supv \\
+%%       \midrule \midrule
+%%       {\it Scales = \{1, 0.5\}} & & \\
+%%       Max-Pooling & 32.95 & 34.70 \\
+%%       Average-Pooling & 33.69 & 35.14 \\
+%%       Attention & 34.03 & 35.41 \\
+%%       \midrule
+%%       {\it Scales = \{1, 0.75, 0.5\}} & & \\
+%%       Max-Pooling & 33.58 & 35.08 \\
+%%       Average-Pooling & 33.74 & 35.72 \\
+%%       Attention & 33.42 & 35.78 \\
+%%       \bottomrule[0.1 em]
+%%     \end{tabular}
+%%     \caption{Results on subset of MS-COCO {\it val} set with DeepLab-LargeFOV as baseline. E-Supv: extra supervision.}
+%%     \label{tab:deeplab_coco}
+%% \end{table}
+
+%% \begin{table}[!t]
+%%   \centering
+%% %  \rowcolors{2}{}{yelloworange!35}
+%%   \addtolength{\tabcolsep}{2.5pt}
+%%     \begin{tabular}{l c c}
+%%       \toprule[0.2 em]
+%%       \multicolumn{2}{l}{Baseline: DeepLab-MSc-LargeFOV} & 31.61 \\
+%%       \toprule[0.2 em]
+%%       {\bf Merging Method} & & w/ E-Supv \\
+%%       \midrule \midrule
+%%       {\it Scales = \{1, 0.5\}} & & \\
+%%       Max-Pooling & 33.18 & 32.99 \\
+%%       Average-Pooling & 33.84 & 34.00 \\
+%%       Attention & 34.17 & 34.15 \\
+%%       \midrule
+%%       {\it Scales = \{1, 0.75, 0.5\}} & & \\
+%%       Max-Pooling & 33.38 & 33.16 \\
+%%       Average-Pooling & 33.68 & 34.15 \\
+%%       Attention & 33.87 & 34.22 \\
+%%       \bottomrule[0.1 em]
+%%     \end{tabular}
+%%     \caption{Results on subset of MS-COCO {\it val} set with DeepLab-MSc-LargeFOV as baseline. E-Supv: extra supervision.}
+%%     \label{tab:deeplab_msc_coco}
+%% \end{table}
+
+%% \paragraph{Improve baselines} We also observe similar results as those on PASCAL-Person-Part datset. In \tabref{tab:deeplab_coco}, the baseline, DeepLab-LargeFOV, achieves a low mean IOU $31.22 \%$ due to the difficulty of MS-COCO dataset (\eg, large object scale variance and more object classes). However, employing multi-scale inputs, attention model, and extra supervision can brings $4.6\%$ improvement over the baseline. In \tabref{tab:deeplab_msc_coco}, the baseline, DeepLab-MSc-LargeFOV, improves only marginally (about $0.4\%$) over DeepLab-LargeFOV baseline. We observe that employing multi-scale inputs is more effective in this case than introducing extra supervision, which only improves the results slightly for average-pooling and attention model with three scale inputs. Comparing \tabref{tab:deeplab_coco} and \tabref{tab:deeplab_msc_coco}, we again find that using DeepLab-LargeFOV as baseline can attain better performance than using DeepLab-MSc-LargeFOV as baseline. However, for MS-COCO dataset, the performance of employing ``Average-Pooling'' vs. ``Attention Model'' is very similar. We find that there are many small object classes (\eg, fork, mouse, and toothbrush) with extremely low prediciton accuracy, which dilates the improvment. This challenging problem (\ie, segment small obects and handle imbalanced classes) is considered as future work. On the other hand, we here try to dig into the performance for some class. Specifically, in \tabref{tab:deeplab_coco_person} and \tabref{tab:deeplab_msc_coco_person}, we show the performance for the person class, which occurs most frequently and appears with different scales (see Fig. 5(a), and Fig. 13(b) in \cite{lin2014microsoft}) in the dataset. The improvement gained from the proposed methods becomes more noticeable in this case. In short, the results are similar to what we have observed for PASCAL-Person-Part and PASCAL VOC 2012, where (1) multi-scale inputs are helpful, (2) proposed attention model brings the best performance (and better interpretable saliance maps), (3) introducing extra supervision can further improve the performance, and (4) our proposed methods are most effective when employ DeepLab-LargeFOV as baseline.
+
+
+%% \begin{table}[!t]
+%%   \centering
+%% %  \rowcolors{2}{}{yelloworange!35}
+%%   \addtolength{\tabcolsep}{2.5pt}
+%%     \begin{tabular}{l c c}
+%%       \toprule[0.2 em]
+%%       \multicolumn{2}{l}{Baseline: DeepLab-LargeFOV} & 68.76 \\
+%%       \toprule[0.2 em]
+%%       {\bf Merging Method} & & w/ E-Supv \\
+%%       \midrule \midrule
+%%       {\it Scales = \{1, 0.5\}} & & \\
+%%       Max-Pooling & 70.07 & 71.06 \\
+%%       Average-Pooling & 70.38 & 71.60 \\
+%%       Attention & 70.66 & 72.20 \\
+%%       \midrule
+%%       {\it Scales = \{1, 0.75, 0.5\}} & & \\
+%%       Max-Pooling & 69.97 & 71.43 \\
+%%       Average-Pooling & 69.69 & 71.70 \\
+%%       Attention & 70.14 & 72.72 \\
+%%       \bottomrule[0.1 em]
+%%     \end{tabular}
+%%     \caption{{\bf Person} class IOU on subset of MS-COCO {\it val} set with DeepLab-LargeFOV as baseline. E-Supv: extra supervision.}
+%%     \label{tab:deeplab_coco_person}
+%% \end{table}
+
+%% \begin{table}[!t]
+%%   \centering
+%% %  \rowcolors{2}{}{yelloworange!35}
+%%   \addtolength{\tabcolsep}{2.5pt}
+%%     \begin{tabular}{l c c}
+%%       \toprule[0.2 em]
+%%       \multicolumn{2}{l}{Baseline: DeepLab-MSc-LargeFOV} & 69.52 \\
+%%       \toprule[0.2 em]
+%%       {\bf Merging Method} & & w/ E-Supv \\
+%%       \midrule \midrule
+%%       {\it Scales = \{1, 0.5\}} & & \\
+%%       Max-Pooling & 70.77 & 70.50 \\
+%%       Average-Pooling & 71.39 & 71.30 \\
+%%       Attention & 71.61 & 71.67 \\
+%%       \midrule
+%%       {\it Scales = \{1, 0.75, 0.5\}} & & \\
+%%       Max-Pooling & 70.72 & 70.61 \\
+%%       Average-Pooling & 71.15 & 71.29 \\
+%%       Attention & 71.49 & 71.64 \\
+%%       \bottomrule[0.1 em]
+%%     \end{tabular}
+%%     \caption{{\bf Person} class IOU on subset of MS-COCO {\it val} set with DeepLab-MSc-LargeFOV as baseline. E-Supv: extra supervision.}
+%%     \label{tab:deeplab_msc_coco_person}
+%% \end{table}
+
+
+
+
+
+\section{More qualitative results}
+We show more qualitative results on PASCAL-Person-Part \cite{chen_cvpr14} in \figref{fig:pascal_part_results}, on PASCAL VOC 2012 \cite{everingham2014pascal} in \figref{fig:pascal_voc12_results}, and on subset of MS-COCO 2014 \cite{lin2014microsoft} in \figref{fig:pascal_coco_results2}, respectively.
+
+
+\begin{figure*}
+  \centering
+  \begin{tabular}{c c c c c c}
+   \multicolumn{6}{c}{\includegraphics[width=0.5\linewidth]{fig/voc10_part/legend.pdf}} \\
+   %% \includegraphics[height=0.13\linewidth]{fig/voc10_part/img/2008_000034.jpg} &
+   %% \includegraphics[height=0.13\linewidth]{fig/voc10_part/res_baseline/2008_000034.png} &
+   %% \includegraphics[height=0.13\linewidth]{fig/voc10_part/res_sharenet/2008_000034.png} &
+   %% \includegraphics[height=0.13\linewidth]{fig/voc10_part/att1/2008_000034.pdf} &
+   %% \includegraphics[height=0.13\linewidth]{fig/voc10_part/att2/2008_000034.pdf} &
+   %% \includegraphics[height=0.13\linewidth]{fig/voc10_part/att3/2008_000034.pdf} \\
+   %% \includegraphics[height=0.09\linewidth]{fig/voc10_part/img/2008_003514.jpg} &
+   %% \includegraphics[height=0.09\linewidth]{fig/voc10_part/res_baseline/2008_003514.png} &
+   %% \includegraphics[height=0.09\linewidth]{fig/voc10_part/res_sharenet/2008_003514.png} &
+   %% \includegraphics[height=0.09\linewidth]{fig/voc10_part/att1/2008_003514.pdf} &
+   %% \includegraphics[height=0.09\linewidth]{fig/voc10_part/att2/2008_003514.pdf} &
+   %% \includegraphics[height=0.09\linewidth]{fig/voc10_part/att3/2008_003514.pdf} \\
+   %% \includegraphics[height=0.09\linewidth]{fig/voc10_part/img/2008_000215.jpg} &
+   %% \includegraphics[height=0.09\linewidth]{fig/voc10_part/res_baseline/2008_000215.png} &
+   %% \includegraphics[height=0.09\linewidth]{fig/voc10_part/res_sharenet/2008_000215.png} &
+   %% \includegraphics[height=0.09\linewidth]{fig/voc10_part/att1/2008_000215.pdf} &
+   %% \includegraphics[height=0.09\linewidth]{fig/voc10_part/att2/2008_000215.pdf} &
+   %% \includegraphics[height=0.09\linewidth]{fig/voc10_part/att3/2008_000215.pdf} \\
+   \includegraphics[height=0.09\linewidth]{fig/voc10_part/img/2008_000492.jpg} &
+   \includegraphics[height=0.09\linewidth]{fig/voc10_part/res_baseline/2008_000492.png} &
+   \includegraphics[height=0.09\linewidth]{fig/voc10_part/res_sharenet/2008_000492.png} &
+   \includegraphics[height=0.09\linewidth]{fig/voc10_part/att1/2008_000492.pdf} &
+   \includegraphics[height=0.09\linewidth]{fig/voc10_part/att2/2008_000492.pdf} &
+   \includegraphics[height=0.09\linewidth]{fig/voc10_part/att3/2008_000492.pdf} \\
+   \includegraphics[height=0.13\linewidth]{fig/voc10_part/img/2008_000691.jpg} &
+   \includegraphics[height=0.13\linewidth]{fig/voc10_part/res_baseline/2008_000691.png} &
+   \includegraphics[height=0.13\linewidth]{fig/voc10_part/res_sharenet/2008_000691.png} &
+   \includegraphics[height=0.13\linewidth]{fig/voc10_part/att1/2008_000691.pdf} &
+   \includegraphics[height=0.13\linewidth]{fig/voc10_part/att2/2008_000691.pdf} &
+   \includegraphics[height=0.13\linewidth]{fig/voc10_part/att3/2008_000691.pdf} \\
+   \includegraphics[height=0.09\linewidth]{fig/voc10_part/img/2008_002789.jpg} &
+   \includegraphics[height=0.09\linewidth]{fig/voc10_part/res_baseline/2008_002789.png} &
+   \includegraphics[height=0.09\linewidth]{fig/voc10_part/res_sharenet/2008_002789.png} &
+   \includegraphics[height=0.09\linewidth]{fig/voc10_part/att1/2008_002789.pdf} &
+   \includegraphics[height=0.09\linewidth]{fig/voc10_part/att2/2008_002789.pdf} &
+   \includegraphics[height=0.09\linewidth]{fig/voc10_part/att3/2008_002789.pdf} \\
+   \includegraphics[height=0.13\linewidth]{fig/voc10_part/img/2008_003136.jpg} &
+   \includegraphics[height=0.13\linewidth]{fig/voc10_part/res_baseline/2008_003136.png} &
+   \includegraphics[height=0.13\linewidth]{fig/voc10_part/res_sharenet/2008_003136.png} &
+   \includegraphics[height=0.13\linewidth]{fig/voc10_part/att1/2008_003136.pdf} &
+   \includegraphics[height=0.13\linewidth]{fig/voc10_part/att2/2008_003136.pdf} &
+   \includegraphics[height=0.13\linewidth]{fig/voc10_part/att3/2008_003136.pdf} \\
+   \includegraphics[height=0.13\linewidth]{fig/voc10_part/img/2008_003344.jpg} &
+   \includegraphics[height=0.13\linewidth]{fig/voc10_part/res_baseline/2008_003344.png} &
+   \includegraphics[height=0.13\linewidth]{fig/voc10_part/res_sharenet/2008_003344.png} &
+   \includegraphics[height=0.13\linewidth]{fig/voc10_part/att1/2008_003344.pdf} &
+   \includegraphics[height=0.13\linewidth]{fig/voc10_part/att2/2008_003344.pdf} &
+   \includegraphics[height=0.13\linewidth]{fig/voc10_part/att3/2008_003344.pdf} \\
+   \includegraphics[height=0.11\linewidth]{fig/voc10_part/img/2008_003825.jpg} &
+   \includegraphics[height=0.11\linewidth]{fig/voc10_part/res_baseline/2008_003825.png} &
+   \includegraphics[height=0.11\linewidth]{fig/voc10_part/res_sharenet/2008_003825.png} &
+   \includegraphics[height=0.11\linewidth]{fig/voc10_part/att1/2008_003825.pdf} &
+   \includegraphics[height=0.11\linewidth]{fig/voc10_part/att2/2008_003825.pdf} &
+   \includegraphics[height=0.11\linewidth]{fig/voc10_part/att3/2008_003825.pdf} \\
+   %% \includegraphics[height=0.10\linewidth]{fig/voc10_part/img/2008_005732.jpg} &
+   %% \includegraphics[height=0.10\linewidth]{fig/voc10_part/res_baseline/2008_005732.png} &
+   %% \includegraphics[height=0.10\linewidth]{fig/voc10_part/res_sharenet/2008_005732.png} &
+   %% \includegraphics[height=0.10\linewidth]{fig/voc10_part/att1/2008_005732.pdf} &
+   %% \includegraphics[height=0.10\linewidth]{fig/voc10_part/att2/2008_005732.pdf} &
+   %% \includegraphics[height=0.10\linewidth]{fig/voc10_part/att3/2008_005732.pdf} \\
+   \includegraphics[height=0.1\linewidth]{fig/voc10_part/img/2010_005626.jpg} &
+   \includegraphics[height=0.1\linewidth]{fig/voc10_part/res_baseline/2010_005626.png} &
+   \includegraphics[height=0.1\linewidth]{fig/voc10_part/res_sharenet/2010_005626.png} &
+   \includegraphics[height=0.1\linewidth]{fig/voc10_part/att1/2010_005626.pdf} &
+   \includegraphics[height=0.1\linewidth]{fig/voc10_part/att2/2010_005626.pdf} &
+   \includegraphics[height=0.1\linewidth]{fig/voc10_part/att3/2010_005626.pdf} \\
+   \includegraphics[height=0.1\linewidth]{fig/voc10_part/img/2010_005654.jpg} &
+   \includegraphics[height=0.1\linewidth]{fig/voc10_part/res_baseline/2010_005654.png} &
+   \includegraphics[height=0.1\linewidth]{fig/voc10_part/res_sharenet/2010_005654.png} &
+   \includegraphics[height=0.1\linewidth]{fig/voc10_part/att1/2010_005654.pdf} &
+   \includegraphics[height=0.1\linewidth]{fig/voc10_part/att2/2010_005654.pdf} &
+   \includegraphics[height=0.1\linewidth]{fig/voc10_part/att3/2010_005654.pdf} \\
+   \includegraphics[height=0.1\linewidth]{fig/voc10_part/img/2010_005141.jpg} &
+   \includegraphics[height=0.1\linewidth]{fig/voc10_part/res_baseline/2010_005141.png} &
+   \includegraphics[height=0.1\linewidth]{fig/voc10_part/res_sharenet/2010_005141.png} &
+   \includegraphics[height=0.1\linewidth]{fig/voc10_part/att1/2010_005141.pdf} &
+   \includegraphics[height=0.1\linewidth]{fig/voc10_part/att2/2010_005141.pdf} &
+   \includegraphics[height=0.1\linewidth]{fig/voc10_part/att3/2010_005141.pdf} \\
+   \includegraphics[height=0.087\linewidth]{fig/voc10_part/img/2010_004952.jpg} &
+   \includegraphics[height=0.087\linewidth]{fig/voc10_part/res_baseline/2010_004952.png} &
+   \includegraphics[height=0.087\linewidth]{fig/voc10_part/res_sharenet/2010_004952.png} &
+   \includegraphics[height=0.087\linewidth]{fig/voc10_part/att1/2010_004952.pdf} &
+   \includegraphics[height=0.087\linewidth]{fig/voc10_part/att2/2010_004952.pdf} &
+   \includegraphics[height=0.087\linewidth]{fig/voc10_part/att3/2010_004952.pdf} \\
+   {\scriptsize (a) Image} & 
+   {\scriptsize (b) Baseline} & 
+   {\scriptsize (c) Our model} & 
+   {\scriptsize (d) Scale-1 Attention} & 
+   {\scriptsize (e) Scale-0.75 Attention} &
+   {\scriptsize (f) Scale-0.5 Attention} \\
+  \end{tabular}
+  \caption{Qualitative segmentation results on PASCAL-Person-Part validation set.}
+  \label{fig:pascal_part_results}  
+\end{figure*}
+
+
+%% \begin{figure*}
+%%   \centering
+%%   \scalebox{0.8}{
+%%   \begin{tabular}{c c c c c c}
+%%    \multicolumn{6}{c}{\includegraphics[width=0.5\linewidth]{fig/voc10_part/legend.pdf}} \\
+%%    %% \includegraphics[height=0.09\linewidth]{fig/voc10_part/img/2010_005410.jpg} &
+%%    %% \includegraphics[height=0.09\linewidth]{fig/voc10_part/res_baseline/2010_005410.png} &
+%%    %% \includegraphics[height=0.09\linewidth]{fig/voc10_part/res_sharenet/2010_005410.png} &
+%%    %% \includegraphics[height=0.09\linewidth]{fig/voc10_part/att1/2010_005410.pdf} &
+%%    %% \includegraphics[height=0.09\linewidth]{fig/voc10_part/att2/2010_005410.pdf} &
+%%    %% \includegraphics[height=0.09\linewidth]{fig/voc10_part/att3/2010_005410.pdf} \\
+%%    %% \includegraphics[height=0.13\linewidth]{fig/voc10_part/img/2010_004597.jpg} &
+%%    %% \includegraphics[height=0.13\linewidth]{fig/voc10_part/res_baseline/2010_004597.png} &
+%%    %% \includegraphics[height=0.13\linewidth]{fig/voc10_part/res_sharenet/2010_004597.png} &
+%%    %% \includegraphics[height=0.13\linewidth]{fig/voc10_part/att1/2010_004597.pdf} &
+%%    %% \includegraphics[height=0.13\linewidth]{fig/voc10_part/att2/2010_004597.pdf} &
+%%    %% \includegraphics[height=0.13\linewidth]{fig/voc10_part/att3/2010_004597.pdf} \\
+%%    %% \includegraphics[height=0.11\linewidth]{fig/voc10_part/img/2010_003983.jpg} &
+%%    %% \includegraphics[height=0.11\linewidth]{fig/voc10_part/res_baseline/2010_003983.png} &
+%%    %% \includegraphics[height=0.11\linewidth]{fig/voc10_part/res_sharenet/2010_003983.png} &
+%%    %% \includegraphics[height=0.11\linewidth]{fig/voc10_part/att1/2010_003983.pdf} &
+%%    %% \includegraphics[height=0.11\linewidth]{fig/voc10_part/att2/2010_003983.pdf} &
+%%    %% \includegraphics[height=0.11\linewidth]{fig/voc10_part/att3/2010_003983.pdf} \\
+%%    {\scriptsize (a) Image} & 
+%%    {\scriptsize (b) Baseline} & 
+%%    {\scriptsize (c) Our model} & 
+%%    {\scriptsize (d) Scale-1 Attention} & 
+%%    {\scriptsize (e) Scale-0.75 Attention} &
+%%    {\scriptsize (f) Scale-0.5 Attention} \\
+%%   \end{tabular}
+%%   }
+%%   \caption{Qualitative segmentation results on PASCAL-Person-Part validation set.}
+%%   \label{fig:pascal_part_results}  
+%% \end{figure*}
+
+%% \begin{figure*}
+%%   \centering
+%%   \scalebox{0.8}{
+%%   \begin{tabular}{c c c c c c}
+%%    \multicolumn{6}{c}{\includegraphics[width=0.5\linewidth]{fig/voc10_part/legend.pdf}} \\
+%%    \includegraphics[height=0.13\linewidth]{fig/voc10_part/img/2010_003630.jpg} &
+%%    \includegraphics[height=0.13\linewidth]{fig/voc10_part/res_baseline/2010_003630.png} &
+%%    \includegraphics[height=0.13\linewidth]{fig/voc10_part/res_sharenet/2010_003630.png} &
+%%    \includegraphics[height=0.13\linewidth]{fig/voc10_part/att1/2010_003630.pdf} &
+%%    \includegraphics[height=0.13\linewidth]{fig/voc10_part/att2/2010_003630.pdf} &
+%%    \includegraphics[height=0.13\linewidth]{fig/voc10_part/att3/2010_003630.pdf} \\
+%%    \includegraphics[height=0.09\linewidth]{fig/voc10_part/img/2010_003628.jpg} &
+%%    \includegraphics[height=0.09\linewidth]{fig/voc10_part/res_baseline/2010_003628.png} &
+%%    \includegraphics[height=0.09\linewidth]{fig/voc10_part/res_sharenet/2010_003628.png} &
+%%    \includegraphics[height=0.09\linewidth]{fig/voc10_part/att1/2010_003628.pdf} &
+%%    \includegraphics[height=0.09\linewidth]{fig/voc10_part/att2/2010_003628.pdf} &
+%%    \includegraphics[height=0.09\linewidth]{fig/voc10_part/att3/2010_003628.pdf} \\
+%%    \includegraphics[height=0.09\linewidth]{fig/voc10_part/img/2010_002929.jpg} &
+%%    \includegraphics[height=0.09\linewidth]{fig/voc10_part/res_baseline/2010_002929.png} &
+%%    \includegraphics[height=0.09\linewidth]{fig/voc10_part/res_sharenet/2010_002929.png} &
+%%    \includegraphics[height=0.09\linewidth]{fig/voc10_part/att1/2010_002929.pdf} &
+%%    \includegraphics[height=0.09\linewidth]{fig/voc10_part/att2/2010_002929.pdf} &
+%%    \includegraphics[height=0.09\linewidth]{fig/voc10_part/att3/2010_002929.pdf} \\
+%%    {\scriptsize (a) Image} & 
+%%    {\scriptsize (b) Baseline} & 
+%%    {\scriptsize (c) Our model} & 
+%%    {\scriptsize (d) Scale-1 Attention} & 
+%%    {\scriptsize (e) Scale-0.75 Attention} &
+%%    {\scriptsize (f) Scale-0.5 Attention} \\
+%%   \end{tabular}
+%%   }
+%%   \caption{Qualitative segmentation results on PASCAL-Person-Part validation set.}
+%%   \label{fig:pascal_part_results}  
+%% \end{figure*}
+
+
+%% \begin{figure*}
+%%   \centering
+%%   \begin{tabular}{c c c c c c}
+%%    \includegraphics[height=0.075\linewidth]{fig/voc12/img/2007_005173.jpg} &
+%%    \includegraphics[height=0.075\linewidth]{fig/voc12/res_baseline/2007_005173.png} &
+%%    \includegraphics[height=0.075\linewidth]{fig/voc12/res_sharenet/2007_005173.png} &
+%%    \includegraphics[height=0.075\linewidth]{fig/voc12/att1/2007_005173.pdf} &
+%%    \includegraphics[height=0.075\linewidth]{fig/voc12/att2/2007_005173.pdf} &
+%%    \includegraphics[height=0.075\linewidth]{fig/voc12/att3/2007_005173.pdf} \\
+%%    \includegraphics[height=0.14\linewidth]{fig/voc12/img/2007_005331.jpg} &
+%%    \includegraphics[height=0.14\linewidth]{fig/voc12/res_baseline/2007_005331.png} &
+%%    \includegraphics[height=0.14\linewidth]{fig/voc12/res_sharenet/2007_005331.png} &
+%%    \includegraphics[height=0.14\linewidth]{fig/voc12/att1/2007_005331.pdf} &
+%%    \includegraphics[height=0.14\linewidth]{fig/voc12/att2/2007_005331.pdf} &
+%%    \includegraphics[height=0.14\linewidth]{fig/voc12/att3/2007_005331.pdf} \\
+%%    \includegraphics[height=0.09\linewidth]{fig/voc12/img/2009_000457.jpg} &
+%%    \includegraphics[height=0.09\linewidth]{fig/voc12/res_baseline/2009_000457.png} &
+%%    \includegraphics[height=0.09\linewidth]{fig/voc12/res_sharenet/2009_000457.png} &
+%%    \includegraphics[height=0.09\linewidth]{fig/voc12/att1/2009_000457.pdf} &
+%%    \includegraphics[height=0.09\linewidth]{fig/voc12/att2/2009_000457.pdf} &
+%%    \includegraphics[height=0.09\linewidth]{fig/voc12/att3/2009_000457.pdf} \\
+%%    \includegraphics[height=0.12\linewidth]{fig/voc12/img/2007_000799.jpg} &
+%%    \includegraphics[height=0.12\linewidth]{fig/voc12/res_baseline/2007_000799.png} &
+%%    \includegraphics[height=0.12\linewidth]{fig/voc12/res_sharenet/2007_000799.png} &
+%%    \includegraphics[height=0.12\linewidth]{fig/voc12/att1/2007_000799.pdf} &
+%%    \includegraphics[height=0.12\linewidth]{fig/voc12/att2/2007_000799.pdf} &
+%%    \includegraphics[height=0.12\linewidth]{fig/voc12/att3/2007_000799.pdf} \\
+%%    \includegraphics[height=0.1\linewidth]{fig/voc12/img/2007_003188.jpg} &
+%%    \includegraphics[height=0.1\linewidth]{fig/voc12/res_baseline/2007_003188.png} &
+%%    \includegraphics[height=0.1\linewidth]{fig/voc12/res_sharenet/2007_003188.png} &
+%%    \includegraphics[height=0.1\linewidth]{fig/voc12/att1/2007_003188.pdf} &
+%%    \includegraphics[height=0.1\linewidth]{fig/voc12/att2/2007_003188.pdf} &
+%%    \includegraphics[height=0.1\linewidth]{fig/voc12/att3/2007_003188.pdf} \\
+%%    \includegraphics[height=0.09\linewidth]{fig/voc12/img/2007_003503.jpg} &
+%%    \includegraphics[height=0.09\linewidth]{fig/voc12/res_baseline/2007_003503.png} &
+%%    \includegraphics[height=0.09\linewidth]{fig/voc12/res_sharenet/2007_003503.png} &
+%%    \includegraphics[height=0.09\linewidth]{fig/voc12/att1/2007_003503.pdf} &
+%%    \includegraphics[height=0.09\linewidth]{fig/voc12/att2/2007_003503.pdf} &
+%%    \includegraphics[height=0.09\linewidth]{fig/voc12/att3/2007_003503.pdf} \\
+%%    \includegraphics[height=0.09\linewidth]{fig/voc12/img/2009_001854.jpg} &
+%%    \includegraphics[height=0.09\linewidth]{fig/voc12/res_baseline/2009_001854.png} &
+%%    \includegraphics[height=0.09\linewidth]{fig/voc12/res_sharenet/2009_001854.png} &
+%%    \includegraphics[height=0.09\linewidth]{fig/voc12/att1/2009_001854.pdf} &
+%%    \includegraphics[height=0.09\linewidth]{fig/voc12/att2/2009_001854.pdf} &
+%%    \includegraphics[height=0.09\linewidth]{fig/voc12/att3/2009_001854.pdf} \\
+%%    \includegraphics[height=0.092\linewidth]{fig/voc12/img/2011_002675.jpg} &
+%%    \includegraphics[height=0.092\linewidth]{fig/voc12/res_baseline/2011_002675.png} &
+%%    \includegraphics[height=0.092\linewidth]{fig/voc12/res_sharenet/2011_002675.png} &
+%%    \includegraphics[height=0.092\linewidth]{fig/voc12/att1/2011_002675.pdf} &
+%%    \includegraphics[height=0.092\linewidth]{fig/voc12/att2/2011_002675.pdf} &
+%%    \includegraphics[height=0.092\linewidth]{fig/voc12/att3/2011_002675.pdf} \\
+%%    \includegraphics[height=0.09\linewidth]{fig/voc12/img/2011_002322.jpg} &
+%%    \includegraphics[height=0.09\linewidth]{fig/voc12/res_baseline/2011_002322.png} &
+%%    \includegraphics[height=0.09\linewidth]{fig/voc12/res_sharenet/2011_002322.png} &
+%%    \includegraphics[height=0.09\linewidth]{fig/voc12/att1/2011_002322.pdf} &
+%%    \includegraphics[height=0.09\linewidth]{fig/voc12/att2/2011_002322.pdf} &
+%%    \includegraphics[height=0.09\linewidth]{fig/voc12/att3/2011_002322.pdf} \\
+%%    \includegraphics[height=0.11\linewidth]{fig/voc12/img/2011_001988.jpg} &
+%%    \includegraphics[height=0.11\linewidth]{fig/voc12/res_baseline/2011_001988.png} &
+%%    \includegraphics[height=0.11\linewidth]{fig/voc12/res_sharenet/2011_001988.png} &
+%%    \includegraphics[height=0.11\linewidth]{fig/voc12/att1/2011_001988.pdf} &
+%%    \includegraphics[height=0.11\linewidth]{fig/voc12/att2/2011_001988.pdf} &
+%%    \includegraphics[height=0.11\linewidth]{fig/voc12/att3/2011_001988.pdf} \\
+%%    \includegraphics[height=0.09\linewidth]{fig/voc12/img/2011_001060.jpg} &
+%%    \includegraphics[height=0.09\linewidth]{fig/voc12/res_baseline/2011_001060.png} &
+%%    \includegraphics[height=0.09\linewidth]{fig/voc12/res_sharenet/2011_001060.png} &
+%%    \includegraphics[height=0.09\linewidth]{fig/voc12/att1/2011_001060.pdf} &
+%%    \includegraphics[height=0.09\linewidth]{fig/voc12/att2/2011_001060.pdf} &
+%%    \includegraphics[height=0.09\linewidth]{fig/voc12/att3/2011_001060.pdf} \\
+%%    \includegraphics[height=0.09\linewidth]{fig/voc12/img/2011_000900.jpg} &
+%%    \includegraphics[height=0.09\linewidth]{fig/voc12/res_baseline/2011_000900.png} &
+%%    \includegraphics[height=0.09\linewidth]{fig/voc12/res_sharenet/2011_000900.png} &
+%%    \includegraphics[height=0.09\linewidth]{fig/voc12/att1/2011_000900.pdf} &
+%%    \includegraphics[height=0.09\linewidth]{fig/voc12/att2/2011_000900.pdf} &
+%%    \includegraphics[height=0.09\linewidth]{fig/voc12/att3/2011_000900.pdf} \\
+%%    \includegraphics[height=0.09\linewidth]{fig/voc12/img/2011_000248.jpg} &
+%%    \includegraphics[height=0.09\linewidth]{fig/voc12/res_baseline/2011_000248.png} &
+%%    \includegraphics[height=0.09\linewidth]{fig/voc12/res_sharenet/2011_000248.png} &
+%%    \includegraphics[height=0.09\linewidth]{fig/voc12/att1/2011_000248.pdf} &
+%%    \includegraphics[height=0.09\linewidth]{fig/voc12/att2/2011_000248.pdf} &
+%%    \includegraphics[height=0.09\linewidth]{fig/voc12/att3/2011_000248.pdf} \\
+%%    {\scriptsize (a) Image} & 
+%%    {\scriptsize (b) Baseline} & 
+%%    {\scriptsize (c) Our model} & 
+%%    {\scriptsize (d) Scale-1 Attention} & 
+%%    {\scriptsize (e) Scale-0.75 Attention} &
+%%    {\scriptsize (f) Scale-0.5 Attention} \\
+%%   \end{tabular}
+%%   \caption{Qualitative segmentation results on PASCAL VOC 2012 validation set.} 
+%%   \label{fig:pascal_voc12_results}  
+%% \end{figure*}
+
+\begin{figure*}
+  \centering
+  \begin{tabular}{c c c c c c}
+   \includegraphics[height=0.09\linewidth]{fig/voc12/img/2010_004789.jpg} &
+   \includegraphics[height=0.09\linewidth]{fig/voc12/res_baseline/2010_004789.png} &
+   \includegraphics[height=0.09\linewidth]{fig/voc12/res_sharenet/2010_004789.png} &
+   \includegraphics[height=0.09\linewidth]{fig/voc12/att1/2010_004789.pdf} &
+   \includegraphics[height=0.09\linewidth]{fig/voc12/att2/2010_004789.pdf} &
+   \includegraphics[height=0.09\linewidth]{fig/voc12/att3/2010_004789.pdf} \\
+   \includegraphics[height=0.08\linewidth]{fig/voc12/img/2007_000491.jpg} &
+   \includegraphics[height=0.08\linewidth]{fig/voc12/res_baseline/2007_000491.png} &
+   \includegraphics[height=0.08\linewidth]{fig/voc12/res_sharenet/2007_000491.png} &
+   \includegraphics[height=0.08\linewidth]{fig/voc12/att1/2007_000491.pdf} &
+   \includegraphics[height=0.08\linewidth]{fig/voc12/att2/2007_000491.pdf} &
+   \includegraphics[height=0.08\linewidth]{fig/voc12/att3/2007_000491.pdf} \\
+   \includegraphics[height=0.12\linewidth]{fig/voc12/img/2011_000813.jpg} &
+   \includegraphics[height=0.12\linewidth]{fig/voc12/res_baseline/2011_000813.png} &
+   \includegraphics[height=0.12\linewidth]{fig/voc12/res_sharenet/2011_000813.png} &
+   \includegraphics[height=0.12\linewidth]{fig/voc12/att1/2011_000813.pdf} &
+   \includegraphics[height=0.12\linewidth]{fig/voc12/att2/2011_000813.pdf} &
+   \includegraphics[height=0.12\linewidth]{fig/voc12/att3/2011_000813.pdf} \\
+   \includegraphics[height=0.092\linewidth]{fig/voc12/img/2010_004120.jpg} &
+   \includegraphics[height=0.092\linewidth]{fig/voc12/res_baseline/2010_004120.png} &
+   \includegraphics[height=0.092\linewidth]{fig/voc12/res_sharenet/2010_004120.png} &
+   \includegraphics[height=0.092\linewidth]{fig/voc12/att1/2010_004120.pdf} &
+   \includegraphics[height=0.092\linewidth]{fig/voc12/att2/2010_004120.pdf} &
+   \includegraphics[height=0.092\linewidth]{fig/voc12/att3/2010_004120.pdf} \\
+   \includegraphics[height=0.09\linewidth]{fig/voc12/img/2010_005344.jpg} &
+   \includegraphics[height=0.09\linewidth]{fig/voc12/res_baseline/2010_005344.png} &
+   \includegraphics[height=0.09\linewidth]{fig/voc12/res_sharenet/2010_005344.png} &
+   \includegraphics[height=0.09\linewidth]{fig/voc12/att1/2010_005344.pdf} &
+   \includegraphics[height=0.09\linewidth]{fig/voc12/att2/2010_005344.pdf} &
+   \includegraphics[height=0.09\linewidth]{fig/voc12/att3/2010_005344.pdf} \\
+   \includegraphics[height=0.09\linewidth]{fig/voc12/img/2010_005888.jpg} &
+   \includegraphics[height=0.09\linewidth]{fig/voc12/res_baseline/2010_005888.png} &
+   \includegraphics[height=0.09\linewidth]{fig/voc12/res_sharenet/2010_005888.png} &
+   \includegraphics[height=0.09\linewidth]{fig/voc12/att1/2010_005888.pdf} &
+   \includegraphics[height=0.09\linewidth]{fig/voc12/att2/2010_005888.pdf} &
+   \includegraphics[height=0.09\linewidth]{fig/voc12/att3/2010_005888.pdf} \\
+   \includegraphics[height=0.092\linewidth]{fig/voc12/img/2011_002675.jpg} &
+   \includegraphics[height=0.092\linewidth]{fig/voc12/res_baseline/2011_002675.png} &
+   \includegraphics[height=0.092\linewidth]{fig/voc12/res_sharenet/2011_002675.png} &
+   \includegraphics[height=0.092\linewidth]{fig/voc12/att1/2011_002675.pdf} &
+   \includegraphics[height=0.092\linewidth]{fig/voc12/att2/2011_002675.pdf} &
+   \includegraphics[height=0.092\linewidth]{fig/voc12/att3/2011_002675.pdf} \\
+   \includegraphics[height=0.122\linewidth]{fig/voc12/img/2007_001568.jpg} &
+   \includegraphics[height=0.122\linewidth]{fig/voc12/res_baseline/2007_001568.png} &
+   \includegraphics[height=0.122\linewidth]{fig/voc12/res_sharenet/2007_001568.png} &
+   \includegraphics[height=0.122\linewidth]{fig/voc12/att1/2007_001568.pdf} &
+   \includegraphics[height=0.122\linewidth]{fig/voc12/att2/2007_001568.pdf} &
+   \includegraphics[height=0.122\linewidth]{fig/voc12/att3/2007_001568.pdf} \\
+   %% \includegraphics[height=0.1\linewidth]{fig/voc12/img/2007_001884.jpg} &
+   %% \includegraphics[height=0.1\linewidth]{fig/voc12/res_baseline/2007_001884.png} &
+   %% \includegraphics[height=0.1\linewidth]{fig/voc12/res_sharenet/2007_001884.png} &
+   %% \includegraphics[height=0.1\linewidth]{fig/voc12/att1/2007_001884.pdf} &
+   %% \includegraphics[height=0.1\linewidth]{fig/voc12/att2/2007_001884.pdf} &
+   %% \includegraphics[height=0.1\linewidth]{fig/voc12/att3/2007_001884.pdf} \\
+   %% \includegraphics[height=0.09\linewidth]{fig/voc12/img/2007_002046.jpg} &
+   %% \includegraphics[height=0.09\linewidth]{fig/voc12/res_baseline/2007_002046.png} &
+   %% \includegraphics[height=0.09\linewidth]{fig/voc12/res_sharenet/2007_002046.png} &
+   %% \includegraphics[height=0.09\linewidth]{fig/voc12/att1/2007_002046.pdf} &
+   %% \includegraphics[height=0.09\linewidth]{fig/voc12/att2/2007_002046.pdf} &
+   %% \includegraphics[height=0.09\linewidth]{fig/voc12/att3/2007_002046.pdf} \\
+   \includegraphics[height=0.085\linewidth]{fig/voc12/img/2007_006802.jpg} &
+   \includegraphics[height=0.085\linewidth]{fig/voc12/res_baseline/2007_006802.png} &
+   \includegraphics[height=0.085\linewidth]{fig/voc12/res_sharenet/2007_006802.png} &
+   \includegraphics[height=0.085\linewidth]{fig/voc12/att1/2007_006802.pdf} &
+   \includegraphics[height=0.085\linewidth]{fig/voc12/att2/2007_006802.pdf} &
+   \includegraphics[height=0.085\linewidth]{fig/voc12/att3/2007_006802.pdf} \\
+   %% \includegraphics[height=0.09\linewidth]{fig/voc12/img/2011_000536.jpg} &
+   %% \includegraphics[height=0.09\linewidth]{fig/voc12/res_baseline/2011_000536.png} &
+   %% \includegraphics[height=0.09\linewidth]{fig/voc12/res_sharenet/2011_000536.png} &
+   %% \includegraphics[height=0.09\linewidth]{fig/voc12/att1/2011_000536.pdf} &
+   %% \includegraphics[height=0.09\linewidth]{fig/voc12/att2/2011_000536.pdf} &
+   %% \includegraphics[height=0.09\linewidth]{fig/voc12/att3/2011_000536.pdf} \\
+   \includegraphics[height=0.09\linewidth]{fig/voc12/img/2011_000070.jpg} &
+   \includegraphics[height=0.09\linewidth]{fig/voc12/res_baseline/2011_000070.png} &
+   \includegraphics[height=0.09\linewidth]{fig/voc12/res_sharenet/2011_000070.png} &
+   \includegraphics[height=0.09\linewidth]{fig/voc12/att1/2011_000070.pdf} &
+   \includegraphics[height=0.09\linewidth]{fig/voc12/att2/2011_000070.pdf} &
+   \includegraphics[height=0.09\linewidth]{fig/voc12/att3/2011_000070.pdf} \\
+   \includegraphics[height=0.13\linewidth]{fig/voc12/img/2011_002343.jpg} &
+   \includegraphics[height=0.13\linewidth]{fig/voc12/res_baseline/2011_002343.png} &
+   \includegraphics[height=0.13\linewidth]{fig/voc12/res_sharenet/2011_002343.png} &
+   \includegraphics[height=0.13\linewidth]{fig/voc12/att1/2011_002343.pdf} &
+   \includegraphics[height=0.13\linewidth]{fig/voc12/att2/2011_002343.pdf} &
+   \includegraphics[height=0.13\linewidth]{fig/voc12/att3/2011_002343.pdf} \\
+   \includegraphics[height=0.11\linewidth]{fig/voc12/img/2011_003271.jpg} &
+   \includegraphics[height=0.11\linewidth]{fig/voc12/res_baseline/2011_003271.png} &
+   \includegraphics[height=0.11\linewidth]{fig/voc12/res_sharenet/2011_003271.png} &
+   \includegraphics[height=0.11\linewidth]{fig/voc12/att1/2011_003271.pdf} &
+   \includegraphics[height=0.11\linewidth]{fig/voc12/att2/2011_003271.pdf} &
+   \includegraphics[height=0.11\linewidth]{fig/voc12/att3/2011_003271.pdf} \\
+   %% \includegraphics[height=0.09\linewidth]{fig/voc12/img/2011_001232.jpg} &
+   %% \includegraphics[height=0.09\linewidth]{fig/voc12/res_baseline/2011_001232.png} &
+   %% \includegraphics[height=0.09\linewidth]{fig/voc12/res_sharenet/2011_001232.png} &
+   %% \includegraphics[height=0.09\linewidth]{fig/voc12/att1/2011_001232.pdf} &
+   %% \includegraphics[height=0.09\linewidth]{fig/voc12/att2/2011_001232.pdf} &
+   %% \includegraphics[height=0.09\linewidth]{fig/voc12/att3/2011_001232.pdf} \\
+   {\scriptsize (a) Image} & 
+   {\scriptsize (b) Baseline} & 
+   {\scriptsize (c) Our model} & 
+   {\scriptsize (d) Scale-1 Attention} & 
+   {\scriptsize (e) Scale-0.75 Attention} &
+   {\scriptsize (f) Scale-0.5 Attention} \\
+  \end{tabular}
+  \caption{Qualitative segmentation results on PASCAL VOC 2012 validation set.} 
+  \label{fig:pascal_voc12_results}  
+\end{figure*}
+
+%% \begin{figure*}
+%%   \centering
+%%   \begin{tabular}{c c c c c c}
+%%    \includegraphics[height=0.1\linewidth]{fig/voc12/img/2007_000783.jpg} &
+%%    \includegraphics[height=0.1\linewidth]{fig/voc12/res_baseline/2007_000783.png} &
+%%    \includegraphics[height=0.1\linewidth]{fig/voc12/res_sharenet/2007_000783.png} &
+%%    \includegraphics[height=0.1\linewidth]{fig/voc12/att1/2007_000783.pdf} &
+%%    \includegraphics[height=0.1\linewidth]{fig/voc12/att2/2007_000783.pdf} &
+%%    \includegraphics[height=0.1\linewidth]{fig/voc12/att3/2007_000783.pdf} \\
+%%    \includegraphics[height=0.1\linewidth]{fig/voc12/img/2007_001761.jpg} &
+%%    \includegraphics[height=0.1\linewidth]{fig/voc12/res_baseline/2007_001761.png} &
+%%    \includegraphics[height=0.1\linewidth]{fig/voc12/res_sharenet/2007_001761.png} &
+%%    \includegraphics[height=0.1\linewidth]{fig/voc12/att1/2007_001761.pdf} &
+%%    \includegraphics[height=0.1\linewidth]{fig/voc12/att2/2007_001761.pdf} &
+%%    \includegraphics[height=0.1\linewidth]{fig/voc12/att3/2007_001761.pdf} \\
+%%    \includegraphics[height=0.075\linewidth]{fig/voc12/img/2011_001341.jpg} &
+%%    \includegraphics[height=0.075\linewidth]{fig/voc12/res_baseline/2011_001341.png} &
+%%    \includegraphics[height=0.075\linewidth]{fig/voc12/res_sharenet/2011_001341.png} &
+%%    \includegraphics[height=0.075\linewidth]{fig/voc12/att1/2011_001341.pdf} &
+%%    \includegraphics[height=0.075\linewidth]{fig/voc12/att2/2011_001341.pdf} &
+%%    \includegraphics[height=0.075\linewidth]{fig/voc12/att3/2011_001341.pdf} \\
+%%    \includegraphics[height=0.09\linewidth]{fig/voc12/img/2011_002098.jpg} &
+%%    \includegraphics[height=0.09\linewidth]{fig/voc12/res_baseline/2011_002098.png} &
+%%    \includegraphics[height=0.09\linewidth]{fig/voc12/res_sharenet/2011_002098.png} &
+%%    \includegraphics[height=0.09\linewidth]{fig/voc12/att1/2011_002098.pdf} &
+%%    \includegraphics[height=0.09\linewidth]{fig/voc12/att2/2011_002098.pdf} &
+%%    \includegraphics[height=0.09\linewidth]{fig/voc12/att3/2011_002098.pdf} \\
+%%    %% \includegraphics[height=0.09\linewidth]{fig/voc12/img/2011_002589.jpg} &
+%%    %% \includegraphics[height=0.09\linewidth]{fig/voc12/res_baseline/2011_002589.png} &
+%%    %% \includegraphics[height=0.09\linewidth]{fig/voc12/res_sharenet/2011_002589.png} &
+%%    %% \includegraphics[height=0.09\linewidth]{fig/voc12/att1/2011_002589.pdf} &
+%%    %% \includegraphics[height=0.09\linewidth]{fig/voc12/att2/2011_002589.pdf} &
+%%    %% \includegraphics[height=0.09\linewidth]{fig/voc12/att3/2011_002589.pdf} \\
+%%    %% \includegraphics[height=0.09\linewidth]{fig/voc12/img/2010_005284.jpg} &
+%%    %% \includegraphics[height=0.09\linewidth]{fig/voc12/res_baseline/2010_005284.png} &
+%%    %% \includegraphics[height=0.09\linewidth]{fig/voc12/res_sharenet/2010_005284.png} &
+%%    %% \includegraphics[height=0.09\linewidth]{fig/voc12/att1/2010_005284.pdf} &
+%%    %% \includegraphics[height=0.09\linewidth]{fig/voc12/att2/2010_005284.pdf} &
+%%    %% \includegraphics[height=0.09\linewidth]{fig/voc12/att3/2010_005284.pdf} \\
+%%    {\scriptsize (a) Image} & 
+%%    {\scriptsize (b) Baseline} & 
+%%    {\scriptsize (c) Our model} & 
+%%    {\scriptsize (d) Scale-1 Attention} & 
+%%    {\scriptsize (e) Scale-0.75 Attention} &
+%%    {\scriptsize (f) Scale-0.5 Attention} \\
+%%   \end{tabular}
+%%   \caption{Qualitative segmentation results on PASCAL VOC 2012 validation set.} 
+%%   \label{fig:pascal_voc12_results}  
+%% \end{figure*}
+
+%% \begin{figure*}
+%%   \centering
+%%   \begin{tabular}{c c c c c c}
+%%    \includegraphics[height=0.075\linewidth]{fig/voc12/img/2010_005108.jpg} &
+%%    \includegraphics[height=0.075\linewidth]{fig/voc12/res_baseline/2010_005108.png} &
+%%    \includegraphics[height=0.075\linewidth]{fig/voc12/res_sharenet/2010_005108.png} &
+%%    \includegraphics[height=0.075\linewidth]{fig/voc12/att1/2010_005108.pdf} &
+%%    \includegraphics[height=0.075\linewidth]{fig/voc12/att2/2010_005108.pdf} &
+%%    \includegraphics[height=0.075\linewidth]{fig/voc12/att3/2010_005108.pdf} \\
+%%    \includegraphics[height=0.1\linewidth]{fig/voc12/img/2010_004628.jpg} &
+%%    \includegraphics[height=0.1\linewidth]{fig/voc12/res_baseline/2010_004628.png} &
+%%    \includegraphics[height=0.1\linewidth]{fig/voc12/res_sharenet/2010_004628.png} &
+%%    \includegraphics[height=0.1\linewidth]{fig/voc12/att1/2010_004628.pdf} &
+%%    \includegraphics[height=0.1\linewidth]{fig/voc12/att2/2010_004628.pdf} &
+%%    \includegraphics[height=0.1\linewidth]{fig/voc12/att3/2010_004628.pdf} \\
+%%    \includegraphics[height=0.1\linewidth]{fig/voc12/img/2010_004322.jpg} &
+%%    \includegraphics[height=0.1\linewidth]{fig/voc12/res_baseline/2010_004322.png} &
+%%    \includegraphics[height=0.1\linewidth]{fig/voc12/res_sharenet/2010_004322.png} &
+%%    \includegraphics[height=0.1\linewidth]{fig/voc12/att1/2010_004322.pdf} &
+%%    \includegraphics[height=0.1\linewidth]{fig/voc12/att2/2010_004322.pdf} &
+%%    \includegraphics[height=0.1\linewidth]{fig/voc12/att3/2010_004322.pdf} \\
+%%    \includegraphics[height=0.09\linewidth]{fig/voc12/img/2010_004320.jpg} &
+%%    \includegraphics[height=0.09\linewidth]{fig/voc12/res_baseline/2010_004320.png} &
+%%    \includegraphics[height=0.09\linewidth]{fig/voc12/res_sharenet/2010_004320.png} &
+%%    \includegraphics[height=0.09\linewidth]{fig/voc12/att1/2010_004320.pdf} &
+%%    \includegraphics[height=0.09\linewidth]{fig/voc12/att2/2010_004320.pdf} &
+%%    \includegraphics[height=0.09\linewidth]{fig/voc12/att3/2010_004320.pdf} \\
+%%    {\scriptsize (a) Image} & 
+%%    {\scriptsize (b) Baseline} & 
+%%    {\scriptsize (c) Our model} & 
+%%    {\scriptsize (d) Scale-1 Attention} & 
+%%    {\scriptsize (e) Scale-0.75 Attention} &
+%%    {\scriptsize (f) Scale-0.5 Attention} \\
+%%   \end{tabular}
+%%   \caption{Qualitative segmentation results on PASCAL VOC 2012 validation set.} 
+%%   \label{fig:pascal_voc12_results}  
+%% \end{figure*}
+
+
+\begin{figure*}
+  \centering
+  \begin{tabular}{c c c c c c}
+   %% \includegraphics[height=0.1\linewidth]{fig/coco/img/COCO_val2014_000000000136.jpg} &
+   %% \includegraphics[height=0.1\linewidth]{fig/coco/res_baseline/COCO_val2014_000000000136.png} &
+   %% \includegraphics[height=0.1\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000000136.png} &
+   %% \includegraphics[height=0.1\linewidth]{fig/coco/att1/COCO_val2014_000000000136.pdf} &
+   %% \includegraphics[height=0.1\linewidth]{fig/coco/att2/COCO_val2014_000000000136.pdf} &
+   %% \includegraphics[height=0.1\linewidth]{fig/coco/att3/COCO_val2014_000000000136.pdf} \\
+   %% \includegraphics[height=0.1\linewidth]{fig/coco/img/COCO_val2014_000000000241.jpg} &
+   %% \includegraphics[height=0.1\linewidth]{fig/coco/res_baseline/COCO_val2014_000000000241.png} &
+   %% \includegraphics[height=0.1\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000000241.png} &
+   %% \includegraphics[height=0.1\linewidth]{fig/coco/att1/COCO_val2014_000000000241.pdf} &
+   %% \includegraphics[height=0.1\linewidth]{fig/coco/att2/COCO_val2014_000000000241.pdf} &
+   %% \includegraphics[height=0.1\linewidth]{fig/coco/att3/COCO_val2014_000000000241.pdf} \\
+   %% \includegraphics[height=0.1\linewidth]{fig/coco/img/COCO_val2014_000000000623.jpg} &
+   %% \includegraphics[height=0.1\linewidth]{fig/coco/res_baseline/COCO_val2014_000000000623.png} &
+   %% \includegraphics[height=0.1\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000000623.png} &
+   %% \includegraphics[height=0.1\linewidth]{fig/coco/att1/COCO_val2014_000000000623.pdf} &
+   %% \includegraphics[height=0.1\linewidth]{fig/coco/att2/COCO_val2014_000000000623.pdf} &
+   %% \includegraphics[height=0.1\linewidth]{fig/coco/att3/COCO_val2014_000000000623.pdf} \\
+   %% \includegraphics[height=0.092\linewidth]{fig/coco/img/COCO_val2014_000000000641.jpg} &
+   %% \includegraphics[height=0.092\linewidth]{fig/coco/res_baseline/COCO_val2014_000000000641.png} &
+   %% \includegraphics[height=0.092\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000000641.png} &
+   %% \includegraphics[height=0.092\linewidth]{fig/coco/att1/COCO_val2014_000000000641.pdf} &
+   %% \includegraphics[height=0.092\linewidth]{fig/coco/att2/COCO_val2014_000000000641.pdf} &
+   %% \includegraphics[height=0.092\linewidth]{fig/coco/att3/COCO_val2014_000000000641.pdf} \\
+   \includegraphics[height=0.1\linewidth]{fig/coco/img/COCO_val2014_000000000042.jpg} &
+   \includegraphics[height=0.1\linewidth]{fig/coco/res_baseline/COCO_val2014_000000000042.png} &
+   \includegraphics[height=0.1\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000000042.png} &
+   \includegraphics[height=0.1\linewidth]{fig/coco/att1/COCO_val2014_000000000042.pdf} &
+   \includegraphics[height=0.1\linewidth]{fig/coco/att2/COCO_val2014_000000000042.pdf} &
+   \includegraphics[height=0.1\linewidth]{fig/coco/att3/COCO_val2014_000000000042.pdf} \\
+   \includegraphics[height=0.087\linewidth]{fig/coco/img/COCO_val2014_000000000599.jpg} &
+   \includegraphics[height=0.087\linewidth]{fig/coco/res_baseline/COCO_val2014_000000000599.png} &
+   \includegraphics[height=0.087\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000000599.png} &
+   \includegraphics[height=0.087\linewidth]{fig/coco/att1/COCO_val2014_000000000599.pdf} &
+   \includegraphics[height=0.087\linewidth]{fig/coco/att2/COCO_val2014_000000000599.pdf} &
+   \includegraphics[height=0.087\linewidth]{fig/coco/att3/COCO_val2014_000000000599.pdf} \\
+   \includegraphics[height=0.14\linewidth]{fig/coco/img/COCO_val2014_000000000974.jpg} &
+   \includegraphics[height=0.14\linewidth]{fig/coco/res_baseline/COCO_val2014_000000000974.png} &
+   \includegraphics[height=0.14\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000000974.png} &
+   \includegraphics[height=0.14\linewidth]{fig/coco/att1/COCO_val2014_000000000974.pdf} &
+   \includegraphics[height=0.14\linewidth]{fig/coco/att2/COCO_val2014_000000000974.pdf} &
+   \includegraphics[height=0.14\linewidth]{fig/coco/att3/COCO_val2014_000000000974.pdf} \\
+   %% \includegraphics[height=0.12\linewidth]{fig/coco/img/COCO_val2014_000000001584.jpg} &
+   %% \includegraphics[height=0.12\linewidth]{fig/coco/res_baseline/COCO_val2014_000000001584.png} &
+   %% \includegraphics[height=0.12\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000001584.png} &
+   %% \includegraphics[height=0.12\linewidth]{fig/coco/att1/COCO_val2014_000000001584.pdf} &
+   %% \includegraphics[height=0.12\linewidth]{fig/coco/att2/COCO_val2014_000000001584.pdf} &
+   %% \includegraphics[height=0.12\linewidth]{fig/coco/att3/COCO_val2014_000000001584.pdf} \\
+   %% \includegraphics[height=0.092\linewidth]{fig/coco/img/COCO_val2014_000000002239.jpg} &
+   %% \includegraphics[height=0.092\linewidth]{fig/coco/res_baseline/COCO_val2014_000000002239.png} &
+   %% \includegraphics[height=0.092\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000002239.png} &
+   %% \includegraphics[height=0.092\linewidth]{fig/coco/att1/COCO_val2014_000000002239.pdf} &
+   %% \includegraphics[height=0.092\linewidth]{fig/coco/att2/COCO_val2014_000000002239.pdf} &
+   %% \includegraphics[height=0.092\linewidth]{fig/coco/att3/COCO_val2014_000000002239.pdf} \\
+   %% \includegraphics[height=0.1\linewidth]{fig/coco/img/COCO_val2014_000000000536.jpg} &
+   %% \includegraphics[height=0.1\linewidth]{fig/coco/res_baseline/COCO_val2014_000000000536.png} &
+   %% \includegraphics[height=0.1\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000000536.png} &
+   %% \includegraphics[height=0.1\linewidth]{fig/coco/att1/COCO_val2014_000000000536.pdf} &
+   %% \includegraphics[height=0.1\linewidth]{fig/coco/att2/COCO_val2014_000000000536.pdf} &
+   %% \includegraphics[height=0.1\linewidth]{fig/coco/att3/COCO_val2014_000000000536.pdf} \\  
+   %% \includegraphics[height=0.076\linewidth]{fig/coco/img/COCO_val2014_000000000428.jpg} &
+   %% \includegraphics[height=0.076\linewidth]{fig/coco/res_baseline/COCO_val2014_000000000428.png} &
+   %% \includegraphics[height=0.076\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000000428.png} &
+   %% \includegraphics[height=0.076\linewidth]{fig/coco/att1/COCO_val2014_000000000428.pdf} &
+   %% \includegraphics[height=0.076\linewidth]{fig/coco/att2/COCO_val2014_000000000428.pdf} &
+   %% \includegraphics[height=0.076\linewidth]{fig/coco/att3/COCO_val2014_000000000428.pdf} \\
+   \includegraphics[height=0.1\linewidth]{fig/coco/img/COCO_val2014_000000001799.jpg} &
+   \includegraphics[height=0.1\linewidth]{fig/coco/res_baseline/COCO_val2014_000000001799.png} &
+   \includegraphics[height=0.1\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000001799.png} &
+   \includegraphics[height=0.1\linewidth]{fig/coco/att1/COCO_val2014_000000001799.pdf} &
+   \includegraphics[height=0.1\linewidth]{fig/coco/att2/COCO_val2014_000000001799.pdf} &
+   \includegraphics[height=0.1\linewidth]{fig/coco/att3/COCO_val2014_000000001799.pdf} \\
+   \includegraphics[height=0.12\linewidth]{fig/coco/img/COCO_val2014_000000001089.jpg} &
+   \includegraphics[height=0.12\linewidth]{fig/coco/res_baseline/COCO_val2014_000000001089.png} &
+   \includegraphics[height=0.12\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000001089.png} &
+   \includegraphics[height=0.12\linewidth]{fig/coco/att1/COCO_val2014_000000001089.pdf} &
+   \includegraphics[height=0.12\linewidth]{fig/coco/att2/COCO_val2014_000000001089.pdf} &
+   \includegraphics[height=0.12\linewidth]{fig/coco/att3/COCO_val2014_000000001089.pdf} \\
+   \includegraphics[height=0.13\linewidth]{fig/coco/img/COCO_val2014_000000009007.jpg} &
+   \includegraphics[height=0.13\linewidth]{fig/coco/res_baseline/COCO_val2014_000000009007.png} &
+   \includegraphics[height=0.13\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000009007.png} &
+   \includegraphics[height=0.13\linewidth]{fig/coco/att1/COCO_val2014_000000009007.pdf} &
+   \includegraphics[height=0.13\linewidth]{fig/coco/att2/COCO_val2014_000000009007.pdf} &
+   \includegraphics[height=0.13\linewidth]{fig/coco/att3/COCO_val2014_000000009007.pdf} \\
+   \includegraphics[height=0.087\linewidth]{fig/coco/img/COCO_val2014_000000000985.jpg} &
+   \includegraphics[height=0.087\linewidth]{fig/coco/res_baseline/COCO_val2014_000000000985.png} &
+   \includegraphics[height=0.087\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000000985.png} &
+   \includegraphics[height=0.087\linewidth]{fig/coco/att1/COCO_val2014_000000000985.pdf} &
+   \includegraphics[height=0.087\linewidth]{fig/coco/att2/COCO_val2014_000000000985.pdf} &
+   \includegraphics[height=0.087\linewidth]{fig/coco/att3/COCO_val2014_000000000985.pdf} \\
+   \includegraphics[height=0.13\linewidth]{fig/coco/img/COCO_val2014_000000012748.jpg} &
+   \includegraphics[height=0.13\linewidth]{fig/coco/res_baseline/COCO_val2014_000000012748.png} &
+   \includegraphics[height=0.13\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000012748.png} &
+   \includegraphics[height=0.13\linewidth]{fig/coco/att1/COCO_val2014_000000012748.pdf} &
+   \includegraphics[height=0.13\linewidth]{fig/coco/att2/COCO_val2014_000000012748.pdf} &
+   \includegraphics[height=0.13\linewidth]{fig/coco/att3/COCO_val2014_000000012748.pdf} \\
+   \includegraphics[height=0.1\linewidth]{fig/coco/img/COCO_val2014_000000000923.jpg} &
+   \includegraphics[height=0.1\linewidth]{fig/coco/res_baseline/COCO_val2014_000000000923.png} &
+   \includegraphics[height=0.1\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000000923.png} &
+   \includegraphics[height=0.1\linewidth]{fig/coco/att1/COCO_val2014_000000000923.pdf} &
+   \includegraphics[height=0.1\linewidth]{fig/coco/att2/COCO_val2014_000000000923.pdf} &
+   \includegraphics[height=0.1\linewidth]{fig/coco/att3/COCO_val2014_000000000923.pdf} \\
+   \includegraphics[height=0.09\linewidth]{fig/coco/img/COCO_val2014_000000020774.jpg} &
+   \includegraphics[height=0.09\linewidth]{fig/coco/res_baseline/COCO_val2014_000000020774.png} &
+   \includegraphics[height=0.09\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000020774.png} &
+   \includegraphics[height=0.09\linewidth]{fig/coco/att1/COCO_val2014_000000020774.pdf} &
+   \includegraphics[height=0.09\linewidth]{fig/coco/att2/COCO_val2014_000000020774.pdf} &
+   \includegraphics[height=0.09\linewidth]{fig/coco/att3/COCO_val2014_000000020774.pdf} \\
+   \includegraphics[height=0.09\linewidth]{fig/coco/img/COCO_val2014_000000002562.jpg} &
+   \includegraphics[height=0.09\linewidth]{fig/coco/res_baseline/COCO_val2014_000000002562.png} &
+   \includegraphics[height=0.09\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000002562.png} &
+   \includegraphics[height=0.09\linewidth]{fig/coco/att1/COCO_val2014_000000002562.pdf} &
+   \includegraphics[height=0.09\linewidth]{fig/coco/att2/COCO_val2014_000000002562.pdf} &
+   \includegraphics[height=0.09\linewidth]{fig/coco/att3/COCO_val2014_000000002562.pdf} \\
+   {\scriptsize (a) Image} & 
+   {\scriptsize (b) Baseline} & 
+   {\scriptsize (c) Our model} & 
+   {\scriptsize (d) Scale-1 Attention} & 
+   {\scriptsize (e) Scale-0.75 Attention} &
+   {\scriptsize (f) Scale-0.5 Attention} \\
+  \end{tabular}
+  \caption{Qualitative segmentation results on subset of MS-COCO 2014 validation set.}
+  \label{fig:pascal_coco_results2}  
+\end{figure*}
+
+%% \begin{figure*}
+%%   \centering
+%%   \begin{tabular}{c c c c c c}
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/img/COCO_val2014_000000000294.jpg} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/res_baseline/COCO_val2014_000000000294.png} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000000294.png} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/att1/COCO_val2014_000000000294.pdf} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/att2/COCO_val2014_000000000294.pdf} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/att3/COCO_val2014_000000000294.pdf} \\
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/img/COCO_val2014_000000000675.jpg} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/res_baseline/COCO_val2014_000000000675.png} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000000675.png} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/att1/COCO_val2014_000000000675.pdf} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/att2/COCO_val2014_000000000675.pdf} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/att3/COCO_val2014_000000000675.pdf} \\
+%%    %% \includegraphics[height=0.092\linewidth]{fig/coco/img/COCO_val2014_000000000923.jpg} &
+%%    %% \includegraphics[height=0.092\linewidth]{fig/coco/res_baseline/COCO_val2014_000000000923.png} &
+%%    %% \includegraphics[height=0.092\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000000923.png} &
+%%    %% \includegraphics[height=0.092\linewidth]{fig/coco/att1/COCO_val2014_000000000923.pdf} &
+%%    %% \includegraphics[height=0.092\linewidth]{fig/coco/att2/COCO_val2014_000000000923.pdf} &
+%%    %% \includegraphics[height=0.092\linewidth]{fig/coco/att3/COCO_val2014_000000000923.pdf} \\
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/img/COCO_val2014_000000001146.jpg} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/res_baseline/COCO_val2014_000000001146.png} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000001146.png} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/att1/COCO_val2014_000000001146.pdf} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/att2/COCO_val2014_000000001146.pdf} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/att3/COCO_val2014_000000001146.pdf} \\
+%%    \includegraphics[height=0.12\linewidth]{fig/coco/img/COCO_val2014_000000001532.jpg} &
+%%    \includegraphics[height=0.12\linewidth]{fig/coco/res_baseline/COCO_val2014_000000001532.png} &
+%%    \includegraphics[height=0.12\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000001532.png} &
+%%    \includegraphics[height=0.12\linewidth]{fig/coco/att1/COCO_val2014_000000001532.pdf} &
+%%    \includegraphics[height=0.12\linewidth]{fig/coco/att2/COCO_val2014_000000001532.pdf} &
+%%    \includegraphics[height=0.12\linewidth]{fig/coco/att3/COCO_val2014_000000001532.pdf} \\
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/img/COCO_val2014_000000001626.jpg} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/res_baseline/COCO_val2014_000000001626.png} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000001626.png} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/att1/COCO_val2014_000000001626.pdf} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/att2/COCO_val2014_000000001626.pdf} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/att3/COCO_val2014_000000001626.pdf} \\
+%%    {\scriptsize (a) Image} & 
+%%    {\scriptsize (b) Baseline} & 
+%%    {\scriptsize (c) Our model} & 
+%%    {\scriptsize (d) Scale-1 Attention} & 
+%%    {\scriptsize (e) Scale-0.75 Attention} &
+%%    {\scriptsize (f) Scale-0.5 Attention} \\
+%%   \end{tabular}
+%%   \caption{Qualitative segmentation results on subset of MS-COCO 2014 validation set.}
+%%   \label{fig:pascal_coco_results}  
+%% \end{figure*}
+
+%% \begin{figure*}
+%%   \centering
+%%   \begin{tabular}{c c c c c c}
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/img/COCO_val2014_000000002235.jpg} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/res_baseline/COCO_val2014_000000002235.png} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000002235.png} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/att1/COCO_val2014_000000002235.pdf} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/att2/COCO_val2014_000000002235.pdf} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/att3/COCO_val2014_000000002235.pdf} \\
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/img/COCO_val2014_000000002255.jpg} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/res_baseline/COCO_val2014_000000002255.png} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000002255.png} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/att1/COCO_val2014_000000002255.pdf} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/att2/COCO_val2014_000000002255.pdf} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/att3/COCO_val2014_000000002255.pdf} \\
+%%    \includegraphics[height=0.092\linewidth]{fig/coco/img/COCO_val2014_000000002972.jpg} &
+%%    \includegraphics[height=0.092\linewidth]{fig/coco/res_baseline/COCO_val2014_000000002972.png} &
+%%    \includegraphics[height=0.092\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000002972.png} &
+%%    \includegraphics[height=0.092\linewidth]{fig/coco/att1/COCO_val2014_000000002972.pdf} &
+%%    \includegraphics[height=0.092\linewidth]{fig/coco/att2/COCO_val2014_000000002972.pdf} &
+%%    \includegraphics[height=0.092\linewidth]{fig/coco/att3/COCO_val2014_000000002972.pdf} \\
+%%    \includegraphics[height=0.087\linewidth]{fig/coco/img/COCO_val2014_000000002985.jpg} &
+%%    \includegraphics[height=0.087\linewidth]{fig/coco/res_baseline/COCO_val2014_000000002985.png} &
+%%    \includegraphics[height=0.087\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000002985.png} &
+%%    \includegraphics[height=0.087\linewidth]{fig/coco/att1/COCO_val2014_000000002985.pdf} &
+%%    \includegraphics[height=0.087\linewidth]{fig/coco/att2/COCO_val2014_000000002985.pdf} &
+%%    \includegraphics[height=0.087\linewidth]{fig/coco/att3/COCO_val2014_000000002985.pdf} \\
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/img/COCO_val2014_000000005107.jpg} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/res_baseline/COCO_val2014_000000005107.png} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000005107.png} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/att1/COCO_val2014_000000005107.pdf} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/att2/COCO_val2014_000000005107.pdf} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/att3/COCO_val2014_000000005107.pdf} \\
+%%    \includegraphics[height=0.092\linewidth]{fig/coco/img/COCO_val2014_000000006896.jpg} &
+%%    \includegraphics[height=0.092\linewidth]{fig/coco/res_baseline/COCO_val2014_000000006896.png} &
+%%    \includegraphics[height=0.092\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000006896.png} &
+%%    \includegraphics[height=0.092\linewidth]{fig/coco/att1/COCO_val2014_000000006896.pdf} &
+%%    \includegraphics[height=0.092\linewidth]{fig/coco/att2/COCO_val2014_000000006896.pdf} &
+%%    \includegraphics[height=0.092\linewidth]{fig/coco/att3/COCO_val2014_000000006896.pdf} \\
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/img/COCO_val2014_000000007088.jpg} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/res_baseline/COCO_val2014_000000007088.png} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000007088.png} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/att1/COCO_val2014_000000007088.pdf} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/att2/COCO_val2014_000000007088.pdf} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/att3/COCO_val2014_000000007088.pdf} \\  
+
+%%    {\scriptsize (a) Image} & 
+%%    {\scriptsize (b) Baseline} & 
+%%    {\scriptsize (c) Our model} & 
+%%    {\scriptsize (d) Scale-1 Attention} & 
+%%    {\scriptsize (e) Scale-0.75 Attention} &
+%%    {\scriptsize (f) Scale-0.5 Attention} \\
+%%   \end{tabular}
+%%   \caption{Qualitative segmentation results on subset of MS-COCO 2014 validation set.}
+%%   \label{fig:pascal_coco_results}  
+%% \end{figure*}
+
+%% \begin{figure*}
+%%   \centering
+%%   \begin{tabular}{c c c c c c}
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/img/COCO_val2014_000000007304.jpg} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/res_baseline/COCO_val2014_000000007304.png} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000007304.png} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/att1/COCO_val2014_000000007304.pdf} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/att2/COCO_val2014_000000007304.pdf} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/att3/COCO_val2014_000000007304.pdf} \\
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/img/COCO_val2014_000000007682.jpg} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/res_baseline/COCO_val2014_000000007682.png} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000007682.png} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/att1/COCO_val2014_000000007682.pdf} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/att2/COCO_val2014_000000007682.pdf} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/att3/COCO_val2014_000000007682.pdf} \\
+%%    \includegraphics[height=0.092\linewidth]{fig/coco/img/COCO_val2014_000000010056.jpg} &
+%%    \includegraphics[height=0.092\linewidth]{fig/coco/res_baseline/COCO_val2014_000000010056.png} &
+%%    \includegraphics[height=0.092\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000010056.png} &
+%%    \includegraphics[height=0.092\linewidth]{fig/coco/att1/COCO_val2014_000000010056.pdf} &
+%%    \includegraphics[height=0.092\linewidth]{fig/coco/att2/COCO_val2014_000000010056.pdf} &
+%%    \includegraphics[height=0.092\linewidth]{fig/coco/att3/COCO_val2014_000000010056.pdf} \\
+%%    \includegraphics[height=0.087\linewidth]{fig/coco/img/COCO_val2014_000000010123.jpg} &
+%%    \includegraphics[height=0.087\linewidth]{fig/coco/res_baseline/COCO_val2014_000000010123.png} &
+%%    \includegraphics[height=0.087\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000010123.png} &
+%%    \includegraphics[height=0.087\linewidth]{fig/coco/att1/COCO_val2014_000000010123.pdf} &
+%%    \includegraphics[height=0.087\linewidth]{fig/coco/att2/COCO_val2014_000000010123.pdf} &
+%%    \includegraphics[height=0.087\linewidth]{fig/coco/att3/COCO_val2014_000000010123.pdf} \\
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/img/COCO_val2014_000000010205.jpg} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/res_baseline/COCO_val2014_000000010205.png} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000010205.png} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/att1/COCO_val2014_000000010205.pdf} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/att2/COCO_val2014_000000010205.pdf} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/att3/COCO_val2014_000000010205.pdf} \\
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/img/COCO_val2014_000000011202.jpg} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/res_baseline/COCO_val2014_000000011202.png} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000011202.png} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/att1/COCO_val2014_000000011202.pdf} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/att2/COCO_val2014_000000011202.pdf} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/att3/COCO_val2014_000000011202.pdf} \\
+%%    \includegraphics[height=0.092\linewidth]{fig/coco/img/COCO_val2014_000000012192.jpg} &
+%%    \includegraphics[height=0.092\linewidth]{fig/coco/res_baseline/COCO_val2014_000000012192.png} &
+%%    \includegraphics[height=0.092\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000012192.png} &
+%%    \includegraphics[height=0.092\linewidth]{fig/coco/att1/COCO_val2014_000000012192.pdf} &
+%%    \includegraphics[height=0.092\linewidth]{fig/coco/att2/COCO_val2014_000000012192.pdf} &
+%%    \includegraphics[height=0.092\linewidth]{fig/coco/att3/COCO_val2014_000000012192.pdf} \\  
+%%    \includegraphics[height=0.076\linewidth]{fig/coco/img/COCO_val2014_000000015301.jpg} &
+%%    \includegraphics[height=0.076\linewidth]{fig/coco/res_baseline/COCO_val2014_000000015301.png} &
+%%    \includegraphics[height=0.076\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000015301.png} &
+%%    \includegraphics[height=0.076\linewidth]{fig/coco/att1/COCO_val2014_000000015301.pdf} &
+%%    \includegraphics[height=0.076\linewidth]{fig/coco/att2/COCO_val2014_000000015301.pdf} &
+%%    \includegraphics[height=0.076\linewidth]{fig/coco/att3/COCO_val2014_000000015301.pdf} \\
+%%    {\scriptsize (a) Image} & 
+%%    {\scriptsize (b) Baseline} & 
+%%    {\scriptsize (c) Our model} & 
+%%    {\scriptsize (d) Scale-1 Attention} & 
+%%    {\scriptsize (e) Scale-0.75 Attention} &
+%%    {\scriptsize (f) Scale-0.5 Attention} \\
+%%   \end{tabular}
+%%   \caption{Qualitative segmentation results on subset of MS-COCO 2014 validation set.}
+%%   \label{fig:pascal_coco_results}  
+%% \end{figure*}
+
+%% \begin{figure*}
+%%   \centering
+%%   \begin{tabular}{c c c c c c}
+%%    \includegraphics[height=0.092\linewidth]{fig/coco/img/COCO_val2014_000000018462.jpg} &
+%%    \includegraphics[height=0.092\linewidth]{fig/coco/res_baseline/COCO_val2014_000000018462.png} &
+%%    \includegraphics[height=0.092\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000018462.png} &
+%%    \includegraphics[height=0.092\linewidth]{fig/coco/att1/COCO_val2014_000000018462.pdf} &
+%%    \includegraphics[height=0.092\linewidth]{fig/coco/att2/COCO_val2014_000000018462.pdf} &
+%%    \includegraphics[height=0.092\linewidth]{fig/coco/att3/COCO_val2014_000000018462.pdf} \\
+%%    \includegraphics[height=0.087\linewidth]{fig/coco/img/COCO_val2014_000000020254.jpg} &
+%%    \includegraphics[height=0.087\linewidth]{fig/coco/res_baseline/COCO_val2014_000000020254.png} &
+%%    \includegraphics[height=0.087\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000020254.png} &
+%%    \includegraphics[height=0.087\linewidth]{fig/coco/att1/COCO_val2014_000000020254.pdf} &
+%%    \includegraphics[height=0.087\linewidth]{fig/coco/att2/COCO_val2014_000000020254.pdf} &
+%%    \includegraphics[height=0.087\linewidth]{fig/coco/att3/COCO_val2014_000000020254.pdf} \\
+%%    \includegraphics[height=0.076\linewidth]{fig/coco/img/COCO_val2014_000000007115.jpg} &
+%%    \includegraphics[height=0.076\linewidth]{fig/coco/res_baseline/COCO_val2014_000000007115.png} &
+%%    \includegraphics[height=0.076\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000007115.png} &
+%%    \includegraphics[height=0.076\linewidth]{fig/coco/att1/COCO_val2014_000000007115.pdf} &
+%%    \includegraphics[height=0.076\linewidth]{fig/coco/att2/COCO_val2014_000000007115.pdf} &
+%%    \includegraphics[height=0.076\linewidth]{fig/coco/att3/COCO_val2014_000000007115.pdf} \\
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/img/COCO_val2014_000000016977.jpg} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/res_baseline/COCO_val2014_000000016977.png} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000016977.png} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/att1/COCO_val2014_000000016977.pdf} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/att2/COCO_val2014_000000016977.pdf} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/att3/COCO_val2014_000000016977.pdf} \\
+%%    \includegraphics[height=0.092\linewidth]{fig/coco/img/COCO_val2014_000000001592.jpg} &
+%%    \includegraphics[height=0.092\linewidth]{fig/coco/res_baseline/COCO_val2014_000000001592.png} &
+%%    \includegraphics[height=0.092\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000001592.png} &
+%%    \includegraphics[height=0.092\linewidth]{fig/coco/att1/COCO_val2014_000000001592.pdf} &
+%%    \includegraphics[height=0.092\linewidth]{fig/coco/att2/COCO_val2014_000000001592.pdf} &
+%%    \includegraphics[height=0.092\linewidth]{fig/coco/att3/COCO_val2014_000000001592.pdf} \\
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/img/COCO_val2014_000000016285.jpg} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/res_baseline/COCO_val2014_000000016285.png} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/res_sharenet/COCO_val2014_000000016285.png} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/att1/COCO_val2014_000000016285.pdf} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/att2/COCO_val2014_000000016285.pdf} &
+%%    \includegraphics[height=0.1\linewidth]{fig/coco/att3/COCO_val2014_000000016285.pdf} \\
+
+%%    {\scriptsize (a) Image} & 
+%%    {\scriptsize (b) Baseline} & 
+%%    {\scriptsize (c) Our model} & 
+%%    {\scriptsize (d) Scale-1 Attention} & 
+%%    {\scriptsize (e) Scale-0.75 Attention} &
+%%    {\scriptsize (f) Scale-0.5 Attention} \\
+%%   \end{tabular}
+%%   \caption{Qualitative segmentation results on subset of MS-COCO 2014 validation set.}
+%%   \label{fig:pascal_coco_results}  
+%% \end{figure*}
+
+
+{\small
+\bibliographystyle{ieee}
+\bibliography{egbib}
+}
+
+\end{document}

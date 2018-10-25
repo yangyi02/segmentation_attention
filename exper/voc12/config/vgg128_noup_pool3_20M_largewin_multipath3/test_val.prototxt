@@ -1,0 +1,645 @@
+# VGG 16-layer network convolutional finetuning
+# Network modified to have smaller receptive field (128 pixels)
+# and smaller stride (8 pixels) when run in convolutional mode.
+#
+# In this model we also change max pooling size in the first 4 layers
+# from 2 to 3 while retaining stride = 2
+# which makes it easier to exactly align responses at different layers.
+#
+name: "vgg128_noup_pool3_20M_largewin_multipath3"
+
+layer {
+  name: "data"
+  type: "ImageSegData"
+  top: "data"
+#  top: "label"
+#  top: "data_dim"
+  image_data_param {
+    root_folder: "/home/lcchen/workspace/rmt/data/pascal/VOCdevkit/VOC2012"
+    source: "voc12/list/val.txt"
+    batch_size: 1
+    label_type: NONE
+  }
+  transform_param {
+    mean_value: 104.008
+    mean_value: 116.669
+    mean_value: 122.675
+    crop_size: 513
+    mirror: false
+  }
+  include: { phase: TEST }
+}
+
+### NETWORK ###
+
+layer {
+  bottom: "data"
+  top: "conv1_1"
+  name: "conv1_1"
+  type: "Convolution"
+  convolution_param {
+    num_output: 64
+    pad: 1
+    kernel_size: 3
+  }
+}
+layer {
+  bottom: "conv1_1"
+  top: "conv1_1"
+  name: "relu1_1"
+  type: "ReLU"
+}
+layer {
+  bottom: "conv1_1"
+  top: "conv1_2"
+  name: "conv1_2"
+  type: "Convolution"
+  convolution_param {
+    num_output: 64
+    pad: 1
+    kernel_size: 3
+  }
+}
+layer {
+  bottom: "conv1_2"
+  top: "conv1_2"
+  name: "relu1_2"
+  type: "ReLU"
+}
+layer {
+  bottom: "conv1_2"
+  top: "pool1"
+  name: "pool1"
+  type: "Pooling"
+  pooling_param {
+    pool: MAX
+    kernel_size: 3
+    stride: 2
+    pad: 1
+  }
+}
+layer {
+  bottom: "pool1"
+  top: "conv2_1"
+  name: "conv2_1"
+  type: "Convolution"
+  convolution_param {
+    num_output: 128
+    pad: 1
+    kernel_size: 3
+  }
+}
+layer {
+  bottom: "conv2_1"
+  top: "conv2_1"
+  name: "relu2_1"
+  type: "ReLU"
+}
+layer {
+  bottom: "conv2_1"
+  top: "conv2_2"
+  name: "conv2_2"
+  type: "Convolution"
+  convolution_param {
+    num_output: 128
+    pad: 1
+    kernel_size: 3
+  }
+}
+layer {
+  bottom: "conv2_2"
+  top: "conv2_2"
+  name: "relu2_2"
+  type: "ReLU"
+}
+layer {
+  bottom: "conv2_2"
+  top: "pool2"
+  name: "pool2"
+  type: "Pooling"
+  pooling_param {
+    pool: MAX
+    kernel_size: 3
+    stride: 2
+    pad: 1
+  }
+}
+layer {
+  bottom: "pool2"
+  top: "conv3_1"
+  name: "conv3_1"
+  type: "Convolution"
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+  }
+}
+layer {
+  bottom: "conv3_1"
+  top: "conv3_1"
+  name: "relu3_1"
+  type: "ReLU"
+}
+layer {
+  bottom: "conv3_1"
+  top: "conv3_2"
+  name: "conv3_2"
+  type: "Convolution"
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+  }
+}
+layer {
+  bottom: "conv3_2"
+  top: "conv3_2"
+  name: "relu3_2"
+  type: "ReLU"
+}
+layer {
+  bottom: "conv3_2"
+  top: "conv3_3"
+  name: "conv3_3"
+  type: "Convolution"
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+  }
+}
+layer {
+  bottom: "conv3_3"
+  top: "conv3_3"
+  name: "relu3_3"
+  type: "ReLU"
+}
+layer {
+  bottom: "conv3_3"
+  top: "pool3"
+  name: "pool3"
+  type: "Pooling"
+  pooling_param {
+    pool: MAX
+    kernel_size: 3
+    stride: 2
+    pad: 1
+  }
+}
+layer {
+  bottom: "pool3"
+  top: "conv4_1"
+  name: "conv4_1"
+  type: "Convolution"
+  convolution_param {
+    num_output: 512
+    pad: 1
+    kernel_size: 3
+  }
+}
+layer {
+  bottom: "conv4_1"
+  top: "conv4_1"
+  name: "relu4_1"
+  type: "ReLU"
+}
+layer {
+  bottom: "conv4_1"
+  top: "conv4_2"
+  name: "conv4_2"
+  type: "Convolution"
+  convolution_param {
+    num_output: 512
+    pad: 1
+    kernel_size: 3
+  }
+}
+layer {
+  bottom: "conv4_2"
+  top: "conv4_2"
+  name: "relu4_2"
+  type: "ReLU"
+}
+layer {
+  bottom: "conv4_2"
+  top: "conv4_3"
+  name: "conv4_3"
+  type: "Convolution"
+  convolution_param {
+    num_output: 512
+    pad: 1
+    kernel_size: 3
+  }
+}
+layer {
+  bottom: "conv4_3"
+  top: "conv4_3"
+  name: "relu4_3"
+  type: "ReLU"
+}
+layer {
+  bottom: "conv4_3"
+  top: "pool4"
+  name: "pool4"
+  type: "Pooling"
+  pooling_param {
+    pool: MAX
+    kernel_size: 3
+    pad: 1
+    #stride: 2
+    stride: 1
+  }
+}
+layer {
+  bottom: "pool4"
+  top: "conv5_1"
+  name: "conv5_1"
+  type: "Convolution"
+  convolution_param {
+    num_output: 512
+    #pad: 1
+    pad: 2
+    hole: 2
+    kernel_size: 3
+  }
+}
+layer {
+  bottom: "conv5_1"
+  top: "conv5_1"
+  name: "relu5_1"
+  type: "ReLU"
+}
+layer {
+  bottom: "conv5_1"
+  top: "conv5_2"
+  name: "conv5_2"
+  type: "Convolution"
+  convolution_param {
+    num_output: 512
+    #pad: 1
+    pad: 2
+    hole: 2
+    kernel_size: 3
+  }
+}
+layer {
+  bottom: "conv5_2"
+  top: "conv5_2"
+  name: "relu5_2"
+  type: "ReLU"
+}
+layer {
+  bottom: "conv5_2"
+  top: "conv5_3"
+  name: "conv5_3"
+  type: "Convolution"
+  convolution_param {
+    num_output: 512
+    #pad: 1
+    pad: 2
+    hole: 2
+    kernel_size: 3
+  }
+}
+layer {
+  bottom: "conv5_3"
+  top: "conv5_3"
+  name: "relu5_3"
+  type: "ReLU"
+}
+layer {
+  bottom: "conv5_3"
+  top: "pool5"
+  name: "pool5"
+  type: "Pooling"
+  pooling_param {
+    pool: MAX
+    #kernel_size: 2
+    #stride: 2
+    kernel_size: 3
+    stride: 1
+    pad: 1
+  }
+}
+
+layer {
+  bottom: "pool5"
+  top: "fc6"
+  name: "fc6"
+  type: "Convolution"
+  convolution_param {
+    num_output: 1024
+    pad: 12
+    hole: 12
+    kernel_size: 3
+  }
+}
+layer {
+  bottom: "fc6"
+  top: "fc6"
+  name: "relu6"
+  type: "ReLU"
+}
+layer {
+  bottom: "fc6"
+  top: "fc6"
+  name: "drop6"
+  type: "Dropout"
+  dropout_param {
+    dropout_ratio: 0.5
+  }
+}
+layer {
+  bottom: "fc6"
+  top: "fc7"
+  name: "fc7"
+  type: "Convolution"
+  convolution_param {
+    num_output: 1024
+    kernel_size: 1
+  }
+}
+layer {
+  bottom: "fc7"
+  top: "fc7"
+  name: "relu7"
+  type: "ReLU"
+}
+layer {
+  bottom: "fc7"
+  top: "fc7"
+  name: "drop7"
+  type: "Dropout"
+  dropout_param {
+    dropout_ratio: 0.5
+  }
+}
+
+# # -------------- layer 9 ----------------
+layer {
+  bottom: "fc7"
+  top: "fc7_upsample"
+  name: "fc7_upsample"
+  type: "Interp"
+  interp_param {
+    zoom_factor: 2
+  }
+}
+
+layer {
+  bottom: "fc7_upsample"
+  top: "conv9_1"
+  name: "conv9_1"
+  type: "Convolution"
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+  }
+}
+
+layer {
+  bottom: "conv9_1"
+  top: "conv9_1"
+  name: "relu9"
+  type: "ReLU"
+}
+
+layer {
+  bottom: "conv9_1"
+  top: "conv9_1"
+  name: "drop9_1"
+  type: "Dropout"
+  dropout_param {
+    dropout_ratio: 0.5
+  }
+}
+
+# # -----------------layer 10 -----------------
+# layer {
+#   bottom: "conv9_1"
+#   top: "conv9_upsample"
+#   name: "conv9_upsample"
+#   type: "Interp"
+#   interp_param {
+#     zoom_factor: 2
+#   }
+# }
+# layer {
+#   bottom: "conv2_2"
+#   bottom: "conv9_upsample"
+#   top: "concat10"
+#   name: "concat10"
+#   type: "Concat"
+# }
+# layer {
+#   bottom: "concat10"
+#   top: "conv10_1"
+#   name: "conv10_1"
+#   type: "Convolution"
+#   param {
+#     lr_mult: 10
+#     decay_mult: 1
+#   }
+#   param {
+#     lr_mult: 20
+#     decay_mult: 0
+#   }
+#   convolution_param {
+#     num_output: 128
+#     pad: 1
+#     kernel_size: 3
+#     weight_filler {
+#       type: "xavier"
+#     }
+#     bias_filler {
+#       type: "constant"
+#       value: 0
+#     }
+#   }
+# }
+# layer {
+#   bottom: "conv10_1"
+#   top: "conv10_1"
+#   name: "relu10"
+#   type: "ReLU"
+# }
+# layer {
+#   bottom: "conv10_1"
+#   top: "conv10_1"
+#   name: "drop10_1"
+#   type: "Dropout"
+#   dropout_param {
+#     dropout_ratio: 0.5
+#   }
+# }
+# # ----------------- layer 11 -----------------
+# layer {
+#   bottom: "conv10_1"
+#   top: "conv10_upsample"
+#   name: "conv10_upsample"
+#   type: "Interp"
+#   interp_param {
+#     zoom_factor: 2
+#   }
+# }
+# layer {
+#   bottom: "conv1_2"
+#   bottom: "conv10_upsample"
+#   top: "concat11"
+#   name: "concat11"
+#   type: "Concat"
+# }
+# layer {
+#   bottom: "concat11"
+#   top: "conv11_1"
+#   name: "conv11_1"
+#   type: "Convolution"
+#   param {
+#     lr_mult: 10
+#     decay_mult: 1
+#   }
+#   param {
+#     lr_mult: 20
+#     decay_mult: 0
+#   }
+#   convolution_param {
+#     num_output: 64
+#     pad: 1
+#     kernel_size: 3
+#     weight_filler {
+#       type: "xavier"
+#     }
+#     bias_filler {
+#       type: "constant"
+#       value: 0
+#     }
+#   }
+# }
+# layer {
+#   bottom: "conv11_1"
+#   top: "conv11_1"
+#   name: "relu11"
+#   type: "ReLU"
+# }
+# layer {
+#   bottom: "conv11_1"
+#   top: "conv11_1"
+#   name: "drop11_1"
+#   type: "Dropout"
+#   dropout_param {
+#     dropout_ratio: 0.5
+#   }
+# }
+
+# ---------------  outputs ----------------
+# --------------- with 1/8 resolution as input -------------
+layer {
+  bottom: "fc7"
+  top: "fc8_voc12"
+  name: "fc8_voc12"
+  type: "Convolution"
+  convolution_param {
+    num_output: 21
+    kernel_size: 1
+  }
+}
+layer {
+  bottom: "fc8_voc12"
+  top: "fc8_interp"
+  name: "fc8_interp"
+  type: "Interp"
+  interp_param {
+    zoom_factor: 8
+  }
+}
+
+layer {
+  name: "fc8_mat"
+  type: "MatWrite"
+  bottom: "fc8_interp"
+  mat_write_param {
+    prefix: "voc12/features/vgg128_noup_pool3_20M_largewin_multipath3/val/fc8/"
+    source: "voc12/list/val_id.txt"
+    strip: 0
+    period: 1
+  }
+  include: { phase: TEST }
+}
+
+# --------------- with 1/4 resolution as input -------------
+layer {
+  bottom: "conv9_1"
+  top: "fc9_voc12"
+  name: "fc9_voc12"
+  type: "Convolution"
+  convolution_param {
+    num_output: 21
+    kernel_size: 1
+  }
+}
+
+layer {
+  bottom: "fc9_voc12"
+  top: "fc9_interp"
+  name: "fc9_interp"
+  type: "Interp"
+  interp_param {
+    zoom_factor: 4
+  }
+}
+
+layer {
+  name: "fc9_mat"
+  type: "MatWrite"
+  bottom: "fc9_interp"
+  mat_write_param {
+    prefix: "voc12/features/vgg128_noup_pool3_20M_largewin_multipath3/val/fc9/"
+    source: "voc12/list/val_id.txt"
+    strip: 0
+    period: 1
+  }
+  include: { phase: TEST }
+}
+
+
+# JAY EDIT THIS LAYER
+#layer {
+#  bottom: "fc8_interp"
+#  bottom: "data_dim"
+#  bottom: "data"
+#   top: "crf_inf"
+#   name: "crf"
+#   type: "DenseCRF"
+#   dense_crf_param { 
+#     max_iter: 10
+#     pos_w: 3
+#     pos_xy_std: 3
+#     bi_w: 4
+#     bi_xy_std: 121
+#     bi_rgb_std: 5
+#   }
+#   include: { phase: TEST }
+# }
+
+# layer {
+#   name: "crf_mat"
+#   type: "MatWrite"
+#   bottom: "crf_inf"
+#   mat_write_param {
+#     prefix: "voc12/features/vgg128_noup_pool3_20M_largewin_multipath3/val/crf/"
+#     source: "voc12/list/val_id.txt"
+#     strip: 0
+#     period: 1
+#   }
+#   include: { phase: TEST }
+# }
+
+# layer {
+#   bottom: "label"
+#   name: "silence"
+#   type: "Silence"
+#   include: { phase: TEST }
+# }
+

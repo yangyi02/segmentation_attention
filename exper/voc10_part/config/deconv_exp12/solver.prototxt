@@ -1,0 +1,15 @@
+train_net: "${EXP}/config/${NET_ID}/train_${TRAIN_SET}.prototxt"
+
+lr_policy: "step"
+gamma: 0.1
+stepsize: 20000
+base_lr: 0.0001
+
+display: 10
+max_iter: 30000
+momentum: 0.99
+weight_decay: 0
+
+snapshot: 10000
+snapshot_prefix: "${EXP}/model/${NET_ID}/train"
+solver_mode: GPU
